@@ -37,7 +37,7 @@ pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 
     1.0 / (1.0 + new_impact.exp())
 }
 
-pub fn determine_sigma(rating: &Rating, &difference: &f64, &variance: &f64) -> f64 {
+pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
     let phi = rating.phi;
     let diff_squared = difference.powi(2);
     // 1. Let a = ln(sigma^2)
