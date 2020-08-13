@@ -8,6 +8,7 @@ Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games.
 use crate::glicko2::algorithm;
 use crate::glicko2::rating;
 use crate::glicko2::rating::match_result::Status;
+
 // Create a rating object for each team
 let mut rating_1 = rating::make_rating();
 let mut rating_2 = rating::make_rating();
