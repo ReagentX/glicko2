@@ -1,2 +1,6 @@
+# Rust project structure
 /target
 Cargo.lock
+
+# Dev environment
+.vscode/
