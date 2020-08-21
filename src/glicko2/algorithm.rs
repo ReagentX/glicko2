@@ -1,4 +1,4 @@
-use crate::glicko2::constants::{Q, TAU, EPSILON};
+use crate::glicko2::constants::{EPSILON, Q, TAU};
 use crate::glicko2::rating::match_result::val;
 use crate::glicko2::rating::match_result::Status;
 use crate::glicko2::rating::Rating;
@@ -8,7 +8,7 @@ pub fn optimality_criterion(
     &phi: &f64,
     &variance: &f64,
     &difference_squared: &f64,
-    &alpha: &f64
+    &alpha: &f64,
 ) -> f64 {
     let tmp = phi.powi(2) + variance + x.exp();
     let tmp_2 = 2.0 * tmp.powi(2);
@@ -48,10 +48,11 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
     let mut b: f64;
     if diff_squared > { phi.powi(2) + variance } {
         b = { diff_squared - phi.powi(2) - variance }.ln();
-    }
-    else {
+    } else {
         let mut k = 1.0;
-        while optimality_criterion(&{ alpha - k * TAU }, &phi, &variance, &diff_squared, &alpha) < 0.0 {
+        while optimality_criterion(&{ alpha - k * TAU }, &phi, &variance, &diff_squared, &alpha)
+            < 0.0
+        {
             k += 1.0;
         }
         b = alpha - k * TAU;
@@ -73,8 +74,7 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
         if f_c * f_b < 0.0 {
             a = b;
             f_a = f_b;
-        }
-        else {
+        } else {
             f_a /= 2.0;
         }
         b = c;
@@ -119,7 +119,7 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
     // let mut mu = rating.mu + Q / denom * (difference / variance_inv);
     let mut phi = { 1.0 / denom }.sqrt();
 
-    // Step 5. Determine the new value, Sigma', ot the sigma. This
+    // Step 5. Determine the new value, Sigma', or the sigma. This
     //         computation requires iteration.
     let sigma = determine_sigma(&rating, &difference, &variance);
 
@@ -135,5 +135,5 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
     rating.mu = mu;
     rating.phi = phi;
     rating.sigma = sigma;
-    rating.scale_up();  // Since this is a reference, we can just scale it back
+    rating.scale_up(); // Since this is a reference, we can just scale it back
 }
