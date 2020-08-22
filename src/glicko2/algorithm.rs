@@ -20,7 +20,7 @@ pub fn optimality_criterion(
 pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
     // Must be called for scaled ratings
     if !rating.is_scaled || !other_rating.is_scaled {
-        panic!("Scaled ratings passed to reduce impact!");
+        panic!("Unscaled ratings passed to reduce impact!");
     }
     let phi = rating.phi.powi(2) + other_rating.phi.powi(2);
     let phi_sqrt = phi.sqrt();
@@ -31,7 +31,7 @@ pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
 
 pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 {
     if !rating.is_scaled || !other_rating.is_scaled {
-        panic!("Scaled ratings passed to expect score!");
+        panic!("Unscaled ratings passed to expect score!");
     }
     let new_impact = -impact * (rating.mu - other_rating.mu);
     1.0 / (1.0 + new_impact.exp())
