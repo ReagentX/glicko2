@@ -8,21 +8,15 @@ Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games.
 use crate::glicko2::rating;
 
 // Create a rating object for each team
-let mut rating_1 = rating::make_rating();
-let mut rating_2 = rating::make_rating();
+let rating_1 = rating::make_rating();
+let rating_2 = rating::make_rating();
 
 // Update ratings for team_1 beating team_2
-let (rating_1, rating_2) = rating::one_on_one::rate(
-    rating_1,
-    rating_2,
-    true
-);
+let (rating_1, rating_2) = rating::one_on_one::rate(rating_1, rating_2, false);
 
 // Get odds (percent chance team_1 beats team_2)
-let odds = rating::one_on_one::odds(
-    new_rating,
-    other_rating
-);  // 0.5441972277941666
+let odds = rating::one_on_one::odds(rating_1, rating_2);
+println!("{:?}", odds); // 0.7086337899806349
 ```
 
 ## Rating
