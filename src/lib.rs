@@ -157,11 +157,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let (new_rating, other_rating) = rating::one_on_one::rate(
-            new_rating,
-            other_rating,
-            false
-        );
+        let (new_rating, other_rating) = rating::one_on_one::rate(new_rating, other_rating, false);
         println!("New: {:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2406803139988);
         assert_eq!(new_rating.phi, 297.7383025722689);
@@ -184,11 +180,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let (new_rating, other_rating) = rating::one_on_one::rate(
-            new_rating,
-            other_rating,
-            true
-        );
+        let (new_rating, other_rating) = rating::one_on_one::rate(new_rating, other_rating, true);
         println!("New: {:?}", new_rating);
         assert_eq!(new_rating.mu, 1486.1105693882885);
         assert_eq!(new_rating.phi, 297.7383025710809);
@@ -204,19 +196,17 @@ mod tests {
 
     #[test]
     fn odds() {
-        let new_rating = rating::make_rating();
-        let other_rating = rating::Rating {
-            mu: 1450.0,
-            phi: 200.0,
-            sigma: 0.0059,
-            is_scaled: false,
-        };
-        let odds = rating::one_on_one::odds(
-            new_rating,
-            other_rating
-        );
+        // Create a rating object for each team
+        let rating_1 = rating::make_rating();
+        let rating_2 = rating::make_rating();
+
+        // Update ratings for team_1 beating team_2
+        let (rating_1, rating_2) = rating::one_on_one::rate(rating_1, rating_2, false);
+
+        // Get odds (percent chance team_1 beats team_2)
+        let odds = rating::one_on_one::odds(rating_1, rating_2);
         println!("{:?}", odds);
-        assert_eq!(odds, 0.5441972277941666);
+        assert_eq!(odds, 0.7086337899806349);
     }
 
     #[test]
@@ -228,10 +218,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = rating::one_on_one::quality(
-            new_rating,
-            other_rating
-        );
+        let quality = rating::one_on_one::quality(new_rating, other_rating);
         println!("{:?}", quality);
         assert_eq!(quality, 0.9116055444116669);
     }
@@ -245,10 +232,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = rating::one_on_one::quality(
-            other_rating,
-            new_rating
-        );
+        let quality = rating::one_on_one::quality(other_rating, new_rating);
         println!("{:?}", quality);
         assert_eq!(quality, 0.9116055444116669);
     }
