@@ -10,19 +10,23 @@ pub struct Rating {
 
 impl Rating {
     pub fn scale_down(&mut self) {
-        let mu = (self.mu - constants::MU) / constants::RATIO;
-        let phi = self.phi / constants::RATIO;
-        self.mu = mu;
-        self.phi = phi;
-        self.is_scaled = true;
+        if !self.is_scaled {
+            let mu = (self.mu - constants::MU) / constants::RATIO;
+            let phi = self.phi / constants::RATIO;
+            self.mu = mu;
+            self.phi = phi;
+            self.is_scaled = true;
+        }
     }
 
     pub fn scale_up(&mut self) {
-        let mu = (self.mu * constants::RATIO) + constants::MU;
-        let phi = self.phi * constants::RATIO;
-        self.mu = mu;
-        self.phi = phi;
-        self.is_scaled = false;
+        if self.is_scaled {
+            let mu = (self.mu * constants::RATIO) + constants::MU;
+            let phi = self.phi * constants::RATIO;
+            self.mu = mu;
+            self.phi = phi;
+            self.is_scaled = false;
+        }
     }
 
     pub fn decay(&mut self) {
