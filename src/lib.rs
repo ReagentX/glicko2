@@ -211,12 +211,12 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = rating::one_on_one::odds(
+        let odds = rating::one_on_one::odds(
             new_rating,
             other_rating
         );
-        println!("{:?}", quality);
-        assert_eq!(quality, 0.5441972277941666);
+        println!("{:?}", odds);
+        assert_eq!(odds, 0.5441972277941666);
     }
 
     #[test]
