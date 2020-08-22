@@ -30,7 +30,9 @@ impl Rating {
     }
 
     pub fn decay(&mut self) {
-        self.scale_down();
+        if !self.is_scaled {
+            self.scale_down();
+        }
         let vinculum = self.phi.powi(2) + self.sigma.powi(2);
         self.phi = vinculum.sqrt();
         self.scale_up();
@@ -84,16 +86,11 @@ pub mod one_on_one {
         expected_score
     }
 
-    pub fn quality(mut rating1: Rating, mut rating2: Rating) -> f64 {
+    pub fn quality(rating1: Rating, rating2: Rating) -> f64 {
         // 1.0 if perfect match
-        rating1.scale_down();
-        rating2.scale_down();
         let expected_score_1 = odds(rating1, rating2);
         let expected_score_2 = odds(rating2, rating1);
         let advantage = expected_score_1 - expected_score_2;  // Advantage team 1 has over team 2
-        rating1.scale_up();
-        rating2.scale_up();
-        println!("------\n\n{} vs {} = {}", expected_score_1, expected_score_2, advantage);
         1.0 - advantage.abs()
     }
 }
