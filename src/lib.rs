@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 mod glicko2;
 
 #[cfg(test)]
