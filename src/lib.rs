@@ -2,7 +2,7 @@
 mod glicko2;
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::glicko2::algorithm;
     use crate::glicko2::constants::{EPSILON, MU, PHI, Q, RATIO, SIGMA, TAU};
     use crate::glicko2::rating;
@@ -146,5 +146,110 @@ mod test {
         assert_eq!(new_rating.phi, 297.7383025722689);
         assert_eq!(new_rating.sigma, 0.005999997552929708);
         assert_eq!(new_rating.is_scaled, false);
+    }
+
+    #[test]
+    fn rate_win() {
+        let new_rating = rating::make_rating();
+        let other_rating = rating::Rating {
+            mu: 1450.0,
+            phi: 200.0,
+            sigma: 0.0059,
+            is_scaled: false,
+        };
+        let (new_rating, other_rating) = rating::one_on_one::rate(
+            new_rating,
+            other_rating,
+            false
+        );
+        println!("New: {:?}", new_rating);
+        assert_eq!(new_rating.mu, 1643.2406803139988);
+        assert_eq!(new_rating.phi, 297.7383025722689);
+        assert_eq!(new_rating.sigma, 0.005999997552929708);
+        assert_eq!(new_rating.is_scaled, false);
+
+        println!("Other: {:?}", other_rating);
+        assert_eq!(other_rating.mu, 1476.3887184474581);
+        assert_eq!(other_rating.phi, 188.4371651087283);
+        assert_eq!(other_rating.sigma, 0.005899995780089439);
+        assert_eq!(other_rating.is_scaled, false);
+    }
+
+    #[test]
+    fn rate_draw() {
+        let new_rating = rating::make_rating();
+        let other_rating = rating::Rating {
+            mu: 1450.0,
+            phi: 200.0,
+            sigma: 0.0059,
+            is_scaled: false,
+        };
+        let (new_rating, other_rating) = rating::one_on_one::rate(
+            new_rating,
+            other_rating,
+            true
+        );
+        println!("New: {:?}", new_rating);
+        assert_eq!(new_rating.mu, 1486.1105693882885);
+        assert_eq!(new_rating.phi, 297.7383025710809);
+        assert_eq!(new_rating.sigma, 0.0059999938227804145);
+        assert_eq!(new_rating.is_scaled, false);
+
+        println!("Other: {:?}", other_rating);
+        assert_eq!(other_rating.mu, 1502.4424933614428);
+        assert_eq!(other_rating.phi, 187.0189343872027);
+        assert_eq!(other_rating.sigma, 0.005899991810542997);
+        assert_eq!(other_rating.is_scaled, false);
+    }
+
+    #[test]
+    fn odds() {
+        let new_rating = rating::make_rating();
+        let other_rating = rating::Rating {
+            mu: 1450.0,
+            phi: 200.0,
+            sigma: 0.0059,
+            is_scaled: false,
+        };
+        let quality = rating::one_on_one::odds(
+            new_rating,
+            other_rating
+        );
+        println!("{:?}", quality);
+        assert_eq!(quality, 0.5441972277941666);
+    }
+
+    #[test]
+    fn quality_team_1_advantage() {
+        let new_rating = rating::make_rating();
+        let other_rating = rating::Rating {
+            mu: 1450.0,
+            phi: 200.0,
+            sigma: 0.0059,
+            is_scaled: false,
+        };
+        let quality = rating::one_on_one::quality(
+            new_rating,
+            other_rating
+        );
+        println!("{:?}", quality);
+        assert_eq!(quality, 0.9116055444116669);
+    }
+
+    #[test]
+    fn quality_team_2_advantage() {
+        let new_rating = rating::make_rating();
+        let other_rating = rating::Rating {
+            mu: 1450.0,
+            phi: 200.0,
+            sigma: 0.0059,
+            is_scaled: false,
+        };
+        let quality = rating::one_on_one::quality(
+            other_rating,
+            new_rating
+        );
+        println!("{:?}", quality);
+        assert_eq!(quality, 0.9116055444116669);
     }
 }
