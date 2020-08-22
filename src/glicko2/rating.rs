@@ -1,6 +1,6 @@
 use crate::glicko2::constants;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Rating {
     pub mu: f64,
     pub phi: f64,
@@ -47,11 +47,55 @@ pub fn make_rating() -> Rating {
 }
 
 pub mod one_on_one {
+    use crate::glicko2::algorithm;
     use crate::glicko2::rating::Rating;
 
-    pub fn rate(rating1: &Rating, rating2: &Rating) {}
+    pub fn rate(mut rating1: Rating, mut rating2: Rating, drawn: bool) -> (Rating, Rating) {
+        // drawn is false if Team 1 beat Team 2
+        if drawn {
+            algorithm::rate(
+                &mut rating1,
+                vec![(super::match_result::Status::Draw, &mut rating2)],
+            );
+            algorithm::rate(
+                &mut rating2,
+                vec![(super::match_result::Status::Draw, &mut rating1)],
+            );
+        } else {
+            algorithm::rate(
+                &mut rating1,
+                vec![(super::match_result::Status::Win, &mut rating2)],
+            );
+            algorithm::rate(
+                &mut rating2,
+                vec![(super::match_result::Status::Loss, &mut rating1)],
+            );
+        };
+        (rating1, rating2)
+    }
 
-    pub fn quality(rating1: &Rating, rating2: &Rating) {}
+    pub fn odds(mut rating1: Rating, mut rating2: Rating) -> f64 {
+        rating1.scale_down();
+        rating2.scale_down();
+        let expected_score =
+            algorithm::expect_score(&rating1, &rating2, algorithm::reduce_impact(&rating1, &rating2));
+        rating1.scale_up();
+        rating2.scale_up();
+        expected_score
+    }
+
+    pub fn quality(mut rating1: Rating, mut rating2: Rating) -> f64 {
+        // 1.0 if perfect match
+        rating1.scale_down();
+        rating2.scale_down();
+        let expected_score_1 = odds(rating1, rating2);
+        let expected_score_2 = odds(rating2, rating1);
+        let advantage = expected_score_1 - expected_score_2;  // Advantage team 1 has over team 2
+        rating1.scale_up();
+        rating2.scale_up();
+        println!("------\n\n{} vs {} = {}", expected_score_1, expected_score_2, advantage);
+        1.0 - advantage.abs()
+    }
 }
 
 pub mod match_result {
