@@ -42,8 +42,8 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
         a - b
     };
 
-    if diff_squared > { phi.powi(2) + variance } {
-        b = { diff_squared - phi.powi(2) - variance }.ln();
+    if diff_squared > (phi.powi(2) + variance) {
+        b = (diff_squared - phi.powi(2) - variance).ln();
     } else {
         let mut k = 1.0;
         while optimality_criterion(alpha - k * TAU) < 0.0 {
@@ -61,7 +61,7 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
     //     fA <- fA/2.
     // (c) Set B <- C and fB <- fC.
     // (d) Stop if |B-A| <= e. Repeat the above three steps otherwise.
-    while { b - a }.abs() > EPSILON {
+    while (b - a).abs() > EPSILON {
         let c = a + (a - b) * f_a / (f_b - f_a);
         let f_c = optimality_criterion(c);
         if f_c * f_b < 0.0 {
@@ -110,7 +110,7 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
     let variance = 1.0 / variance_inv;
     let denom = rating.phi.powi(-2) + d_square_inv;
     // let mut mu = rating.mu + Q / denom * (difference / variance_inv);
-    let mut phi = { 1.0 / denom }.sqrt();
+    let mut phi = (1.0 / denom).sqrt();
 
     // Step 5. Determine the new value, Sigma', or the sigma. This
     //         computation requires iteration.
@@ -118,11 +118,11 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
 
     // Step 6. Update the rating deviation to the new pre-rating period
     //         value, Phi*.
-    let phi_star = { phi.powi(2) + sigma.powi(2) }.sqrt();
+    let phi_star = (phi.powi(2) + sigma.powi(2)).sqrt();
 
     // Step 7. Update the rating and RD to the new values, Mu' and Phi'.
-    phi = 1.0 / { { 1.0 / phi_star }.powi(2) + { 1.0 / variance } }.sqrt();
-    let mu = { rating.mu + phi }.powi(2) * (difference / variance);
+    phi = 1.0 / ((1.0 / phi_star).powi(2) + (1.0 / variance)).sqrt();
+    let mu = (rating.mu + phi).powi(2) * (difference / variance);
 
     // Step 8. Convert ratings and RD's back to original scale.
     rating.mu = mu;
