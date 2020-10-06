@@ -46,9 +46,7 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
         b = { diff_squared - phi.powi(2) - variance }.ln();
     } else {
         let mut k = 1.0;
-        while optimality_criterion(alpha - k * TAU )
-            < 0.0
-        {
+        while optimality_criterion(alpha - k * TAU) < 0.0 {
             k += 1.0;
         }
         b = alpha - k * TAU;
