@@ -3,20 +3,6 @@ use crate::glicko2::rating::match_result::val;
 use crate::glicko2::rating::match_result::Status;
 use crate::glicko2::rating::Rating;
 
-pub fn optimality_criterion(
-    &x: &f64,
-    &phi: &f64,
-    &variance: &f64,
-    &difference_squared: &f64,
-    &alpha: &f64,
-) -> f64 {
-    let tmp = phi.powi(2) + variance + x.exp();
-    let tmp_2 = 2.0 * tmp.powi(2);
-    let a = x.exp() * (difference_squared - tmp) / tmp_2;
-    let b = (x - alpha) / TAU.powi(2);
-    a - b
-}
-
 pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
     // Must be called for scaled ratings
     if !rating.is_scaled || !other_rating.is_scaled {
@@ -46,21 +32,30 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
     // 2. Set the initial values for the iterative algorithm.
     let mut a = alpha;
     let mut b: f64;
+
+    // Optimality criterion as closure so we dont pass references for the above
+    let optimality_criterion = |x: f64| -> f64 {
+        let tmp = phi.powi(2) + variance + x.exp();
+        let tmp_2 = 2.0 * tmp.powi(2);
+        let a = x.exp() * (diff_squared - tmp) / tmp_2;
+        let b = (x - alpha) / TAU.powi(2);
+        a - b
+    };
+
     if diff_squared > { phi.powi(2) + variance } {
         b = { diff_squared - phi.powi(2) - variance }.ln();
     } else {
         let mut k = 1.0;
-        while optimality_criterion(&{ alpha - k * TAU }, &phi, &variance, &diff_squared, &alpha)
+        while optimality_criterion(alpha - k * TAU )
             < 0.0
         {
             k += 1.0;
         }
         b = alpha - k * TAU;
     }
-
     // 3. Let fA = optimality_criterion(A) and f(B) = optimality_criterion(B)
-    let mut f_a = optimality_criterion(&a, &phi, &variance, &diff_squared, &alpha);
-    let mut f_b = optimality_criterion(&b, &phi, &variance, &diff_squared, &alpha);
+    let mut f_a = optimality_criterion(a);
+    let mut f_b = optimality_criterion(b);
 
     // 4. While |B-A| > e, carry out the following steps:
     // (a) Let C = A + (A - B)fA / (fB-fA), and let fC = f(C).
@@ -70,7 +65,7 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
     // (d) Stop if |B-A| <= e. Repeat the above three steps otherwise.
     while { b - a }.abs() > EPSILON {
         let c = a + (a - b) * f_a / (f_b - f_a);
-        let f_c = optimality_criterion(&c, &phi, &variance, &diff_squared, &alpha);
+        let f_c = optimality_criterion(c);
         if f_c * f_b < 0.0 {
             a = b;
             f_a = f_b;
