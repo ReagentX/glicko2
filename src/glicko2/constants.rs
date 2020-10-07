@@ -18,7 +18,7 @@ pub const EPSILON: f64 = 0.0000001;
 /// A constant which is used to standardize the logistic function to `1/(1+exp(-x))` from `1/(1+10^(-r/400))`
 pub const Q: f64 = LN_10 / 400.0;
 
-/// Glicko-2 scale ratip
+/// Glicko-2 scale ratio
 pub const RATIO: f64 =  173.7178;
 
 /// Value for win
