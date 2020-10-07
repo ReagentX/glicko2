@@ -60,7 +60,7 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
     let mut a = alpha;
     let mut b: f64;
 
-    // Optimality criterion as closure so we dont pass references for the above
+    // Optimality criterion as closure so we do not pass references for the above
     let optimality_criterion = |x: f64| -> f64 {
         let tmp = phi.powi(2) + variance + x.exp();
         let tmp_2 = 2.0 * tmp.powi(2);

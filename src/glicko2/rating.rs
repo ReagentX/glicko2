@@ -1,6 +1,6 @@
 use crate::glicko2::constants;
 
-/// Represents a team's Glicko2 rating (mu), distrubition (phi), and volatility (sigma).
+/// Represents a team's Glicko2 rating (mu), distribution (phi), and volatility (sigma).
 #[derive(Debug, Copy, Clone)]
 pub struct Rating {
     pub mu: f64,
@@ -73,7 +73,7 @@ impl Rating {
     }
 }
 
-/// Provides functions to handle a signle one on one game and update ratings accordingly
+/// Provides functions to handle a single one on one game and update ratings accordingly
 pub mod one_on_one {
     use crate::glicko2::algorithm;
     use crate::glicko2::rating::Rating;
