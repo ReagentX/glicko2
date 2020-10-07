@@ -3,8 +3,7 @@ use crate::glicko2::rating::match_result::val;
 use crate::glicko2::rating::match_result::Status;
 use crate::glicko2::rating::Rating;
 
-/// The original form is `g(RD)`.
-/// This function reduces the impact of games as a function of an opponent's RD.
+/// This function reduces the impact of games as a function of an opponent's rating deviation.
 /// 
 /// # Example
 /// 
@@ -129,7 +128,7 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
     // Outcome is a list of outcomes for a set of games between two teams, i.e.
     //   a vector tuples like [(WIN, rating2), ...]
 
-    // Step 2. For each player, convert the rating and RD's onto the
+    // Step 2. For each player, convert the rating and rating deviation onto the
     //         Glicko-2 scale.
     rating.scale_down();
 
@@ -167,11 +166,11 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
     //         value, Phi*.
     let phi_star = (phi.powi(2) + sigma.powi(2)).sqrt();
 
-    // Step 7. Update the rating and RD to the new values, Mu' and Phi'.
+    // Step 7. Update the rating and rating deviation to the new values, Mu' and Phi'.
     phi = 1.0 / ((1.0 / phi_star).powi(2) + (1.0 / variance)).sqrt();
     let mu = (rating.mu + phi).powi(2) * (difference / variance);
 
-    // Step 8. Convert ratings and RD's back to original scale.
+    // Step 8. Convert rating and rating deviation back to original scale.
     rating.mu = mu;
     rating.phi = phi;
     rating.sigma = sigma;
