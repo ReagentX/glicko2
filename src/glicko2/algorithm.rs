@@ -3,6 +3,18 @@ use crate::glicko2::rating::match_result::val;
 use crate::glicko2::rating::match_result::Status;
 use crate::glicko2::rating::Rating;
 
+/// The original form is `g(RD)`.
+/// This function reduces the impact of games as a function of an opponent's RD.
+/// 
+/// # Example
+/// 
+/// ```
+/// let mut team_1 = glicko2::rating::Rating::new();
+/// let mut team_2 = glicko2::rating::Rating::new();
+/// team_1.scale_down();
+/// team_2.scale_down();
+/// let impact = glicko2::algorithm::reduce_impact(&team_1, &team_2);
+/// ```
 pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
     // Must be called for scaled ratings
     if !rating.is_scaled || !other_rating.is_scaled {
@@ -15,6 +27,21 @@ pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
     1.0 / denominator.sqrt()
 }
 
+/// The expected outcome of a game given two sets of ratings.
+/// 
+/// /// # Example
+/// 
+/// ```
+/// let mut team_1 = glicko2::rating::Rating::new();
+/// let mut team_2 = glicko2::rating::Rating::new();
+/// team_1.scale_down();
+/// team_2.scale_down();
+/// let expected_score = glicko2::algorithm::expect_score(
+///     &team_1,
+///     &team_2,
+///     glicko2::algorithm::reduce_impact(&team_1, &team_2),
+/// );
+/// ```
 pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 {
     if !rating.is_scaled || !other_rating.is_scaled {
         panic!("Unscaled ratings passed to expect score!");
@@ -23,6 +50,7 @@ pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 
     1.0 / (1.0 + new_impact.exp())
 }
 
+/// Determine the new value for volatility given a set of ratings.
 pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
     let phi = rating.phi;
     let diff_squared = difference.powi(2);
@@ -78,6 +106,25 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
     1.0f64.exp().powf(a / 2.0)
 }
 
+/// Given a team and a set of outcomes in a period, update the team's ratings.
+/// Because this modifies the rating of the team in-place, you may want to pass a copy
+/// if you wish to preserve old ratings.
+/// 
+/// # Example
+/// 
+/// ```
+/// let mut team_to_update = glicko2::rating::Rating::new();
+/// let mut opponent_1 = glicko2::rating::Rating::new();
+/// let mut opponent_2 = glicko2::rating::Rating::new();
+/// let mut opponent_3 = glicko2::rating::Rating::new();
+/// glicko2::algorithm::rate(
+///     &mut team_to_update,
+///     vec![(glicko2::rating::match_result::Status::Win, &mut opponent_1),
+///          (glicko2::rating::match_result::Status::Loss, &mut opponent_2),
+///          (glicko2::rating::match_result::Status::Draw, &mut opponent_3),
+///      ]
+/// );
+/// ```
 pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
     // Outcome is a list of outcomes for a set of games between two teams, i.e.
     //   a vector tuples like [(WIN, rating2), ...]
