@@ -5,8 +5,7 @@ mod glicko2;
 mod tests {
     use crate::glicko2::algorithm;
     use crate::glicko2::constants::{EPSILON, MU, PHI, Q, RATIO, SIGMA, TAU};
-    use crate::glicko2::rating;
-    use crate::glicko2::rating::match_result;
+    use crate::glicko2::rating::{Rating, one_on_one, match_result};
 
     #[test]
     fn win() {
@@ -45,7 +44,7 @@ mod tests {
 
     #[test]
     fn create_rating() {
-        let new_rating = rating::make_rating();
+        let new_rating = Rating::new();
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 1500.0);
         assert_eq!(new_rating.phi, 350.0);
@@ -55,7 +54,7 @@ mod tests {
 
     #[test]
     fn scale_down() {
-        let mut new_rating = rating::make_rating();
+        let mut new_rating = Rating::new();
         new_rating.scale_down();
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 0.0);
@@ -66,7 +65,7 @@ mod tests {
 
     #[test]
     fn scale_down_already_down() {
-        let mut new_rating = rating::make_rating();
+        let mut new_rating = Rating::new();
         new_rating.scale_down();
         new_rating.scale_down();
         println!("{:?}", new_rating);
@@ -78,7 +77,7 @@ mod tests {
 
     #[test]
     fn scale_up() {
-        let mut new_rating = rating::make_rating();
+        let mut new_rating = Rating::new();
         new_rating.scale_down();
         new_rating.scale_up();
         println!("{:?}", new_rating);
@@ -90,7 +89,7 @@ mod tests {
 
     #[test]
     fn scale_up_already_up() {
-        let mut new_rating = rating::make_rating();
+        let mut new_rating = Rating::new();
         new_rating.scale_up();
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 1500.0);
@@ -101,8 +100,8 @@ mod tests {
 
     #[test]
     fn reduce_impact() {
-        let mut new_rating = rating::make_rating();
-        let mut other_rating = rating::Rating {
+        let mut new_rating = Rating::new();
+        let mut other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
@@ -117,8 +116,8 @@ mod tests {
     #[test]
     #[should_panic]
     fn reduce_impact_unscaled() {
-        let new_rating = rating::make_rating();
-        let other_rating = rating::Rating {
+        let new_rating = Rating::new();
+        let other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
@@ -130,8 +129,8 @@ mod tests {
 
     #[test]
     fn compare() {
-        let mut new_rating = rating::make_rating();
-        let mut other_rating = rating::Rating {
+        let mut new_rating = Rating::new();
+        let mut other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
@@ -150,14 +149,14 @@ mod tests {
 
     #[test]
     fn rate_win() {
-        let new_rating = rating::make_rating();
-        let other_rating = rating::Rating {
+        let new_rating = Rating::new();
+        let other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
             is_scaled: false,
         };
-        let (new_rating, other_rating) = rating::one_on_one::rate(new_rating, other_rating, false);
+        let (new_rating, other_rating) = one_on_one::rate(new_rating, other_rating, false);
         println!("New: {:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2406803139988);
         assert_eq!(new_rating.phi, 297.7383025722689);
@@ -173,14 +172,14 @@ mod tests {
 
     #[test]
     fn rate_draw() {
-        let new_rating = rating::make_rating();
-        let other_rating = rating::Rating {
+        let new_rating = Rating::new();
+        let other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
             is_scaled: false,
         };
-        let (new_rating, other_rating) = rating::one_on_one::rate(new_rating, other_rating, true);
+        let (new_rating, other_rating) = one_on_one::rate(new_rating, other_rating, true);
         println!("New: {:?}", new_rating);
         assert_eq!(new_rating.mu, 1486.1105693882885);
         assert_eq!(new_rating.phi, 297.7383025710809);
@@ -197,42 +196,42 @@ mod tests {
     #[test]
     fn odds() {
         // Create a rating object for each team
-        let rating_1 = rating::make_rating();
-        let rating_2 = rating::make_rating();
+        let rating_1 = Rating::new();
+        let rating_2 = Rating::new();
 
         // Update ratings for team_1 beating team_2
-        let (rating_1, rating_2) = rating::one_on_one::rate(rating_1, rating_2, false);
+        let (rating_1, rating_2) = one_on_one::rate(rating_1, rating_2, false);
 
         // Get odds (percent chance team_1 beats team_2)
-        let odds = rating::one_on_one::odds(rating_1, rating_2);
+        let odds = one_on_one::odds(rating_1, rating_2);
         println!("{:?}", odds);
         assert_eq!(odds, 0.7086337899806349);
     }
 
     #[test]
     fn quality_team_1_advantage() {
-        let new_rating = rating::make_rating();
-        let other_rating = rating::Rating {
+        let new_rating = Rating::new();
+        let other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = rating::one_on_one::quality(new_rating, other_rating);
+        let quality = one_on_one::quality(new_rating, other_rating);
         println!("{:?}", quality);
         assert_eq!(quality, 0.9116055444116669);
     }
 
     #[test]
     fn quality_team_2_advantage() {
-        let new_rating = rating::make_rating();
-        let other_rating = rating::Rating {
+        let new_rating = Rating::new();
+        let other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = rating::one_on_one::quality(other_rating, new_rating);
+        let quality = one_on_one::quality(other_rating, new_rating);
         println!("{:?}", quality);
         assert_eq!(quality, 0.9116055444116669);
     }

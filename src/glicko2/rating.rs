@@ -9,6 +9,16 @@ pub struct Rating {
 }
 
 impl Rating {
+    pub fn new() -> Rating {
+        Rating {
+            mu: constants::MU,
+            phi: constants::PHI,
+            sigma: constants::SIGMA,
+            is_scaled: false,
+        }
+    }
+
+    /// Scales a rating down to the Glicko2 scale
     pub fn scale_down(&mut self) {
         if !self.is_scaled {
             let mu = (self.mu - constants::MU) / constants::RATIO;
@@ -19,6 +29,7 @@ impl Rating {
         }
     }
 
+    /// Scales a rating down to the nominal scale
     pub fn scale_up(&mut self) {
         if self.is_scaled {
             let mu = (self.mu * constants::RATIO) + constants::MU;
@@ -29,6 +40,7 @@ impl Rating {
         }
     }
 
+    /// Decay a rating for a team that has not played during a period
     pub fn decay(&mut self) {
         if !self.is_scaled {
             self.scale_down();
@@ -36,15 +48,6 @@ impl Rating {
         let vinculum = self.phi.powi(2) + self.sigma.powi(2);
         self.phi = vinculum.sqrt();
         self.scale_up();
-    }
-}
-
-pub fn make_rating() -> Rating {
-    Rating {
-        mu: constants::MU,
-        phi: constants::PHI,
-        sigma: constants::SIGMA,
-        is_scaled: false,
     }
 }
 
@@ -79,8 +82,11 @@ pub mod one_on_one {
     pub fn odds(mut rating1: Rating, mut rating2: Rating) -> f64 {
         rating1.scale_down();
         rating2.scale_down();
-        let expected_score =
-            algorithm::expect_score(&rating1, &rating2, algorithm::reduce_impact(&rating1, &rating2));
+        let expected_score = algorithm::expect_score(
+            &rating1,
+            &rating2,
+            algorithm::reduce_impact(&rating1, &rating2),
+        );
         rating1.scale_up();
         rating2.scale_up();
         expected_score
@@ -90,7 +96,7 @@ pub mod one_on_one {
         // 1.0 if perfect match
         let expected_score_1 = odds(rating1, rating2);
         let expected_score_2 = odds(rating2, rating1);
-        let advantage = expected_score_1 - expected_score_2;  // Advantage team 1 has over team 2
+        let advantage = expected_score_1 - expected_score_2; // Advantage team 1 has over team 2
         1.0 - advantage.abs()
     }
 }
