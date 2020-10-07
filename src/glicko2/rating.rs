@@ -9,6 +9,11 @@ pub struct Rating {
 }
 
 impl Rating {
+    /// Create a new instance of a Rating
+    /// ```
+    /// use glicko2::glicko2::rating::Rating;
+    /// let team_1 = Rating::new();
+    /// ```
     pub fn new() -> Rating {
         Rating {
             mu: constants::MU,
