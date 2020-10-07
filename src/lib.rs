@@ -1,5 +1,8 @@
 #![allow(dead_code)]
+// Expose the module
 pub mod glicko2;
+// Re-export so we can use these without reaching into the crate
+pub use crate::glicko2::{algorithm, rating, constants};
 
 #[cfg(test)]
 mod tests {
