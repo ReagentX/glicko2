@@ -4,9 +4,9 @@ use crate::glicko2::rating::match_result::Status;
 use crate::glicko2::rating::Rating;
 
 /// This function reduces the impact of games as a function of an opponent's rating deviation.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// let mut team_1 = glicko2::rating::Rating::new();
 /// let mut team_2 = glicko2::rating::Rating::new();
@@ -27,9 +27,9 @@ pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
 }
 
 /// The expected outcome of a game given two sets of ratings.
-/// 
-/// /// # Example
-/// 
+///
+/// # Example
+///
 /// ```
 /// let mut team_1 = glicko2::rating::Rating::new();
 /// let mut team_2 = glicko2::rating::Rating::new();
@@ -108,9 +108,9 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
 /// Given a team and a set of outcomes in a period, update the team's ratings.
 /// Because this modifies the rating of the team in-place, you may want to pass a copy
 /// if you wish to preserve old ratings.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```
 /// let mut team_to_update = glicko2::rating::Rating::new();
 /// let mut opponent_1 = glicko2::rating::Rating::new();
