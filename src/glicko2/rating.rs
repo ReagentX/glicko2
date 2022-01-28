@@ -11,7 +11,7 @@ pub struct Rating {
 
 impl Rating {
     /// Create a new instance of a Rating with default constants.
-    /// 
+    ///
     /// # Example
     /// ```
     /// let team_1 = glicko2::rating::Rating::new();
@@ -73,6 +73,12 @@ impl Rating {
     }
 }
 
+impl Default for Rating {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// Provides functions to handle a single one on one game and update ratings accordingly
 pub mod one_on_one {
     use crate::glicko2::algorithm;
@@ -80,9 +86,9 @@ pub mod one_on_one {
 
     /// Updates ratings for two teams, where `rating1` beat `rating2`.
     /// If the game was a draw, pass `drawn` as `true`.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// let mut rating_1 = glicko2::rating::Rating::new();
     /// let mut rating_2 = glicko2::rating::Rating::new();
@@ -113,9 +119,9 @@ pub mod one_on_one {
     }
 
     /// Determines the odds the first team will beat the second team
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// let mut rating_1 = glicko2::rating::Rating::new();
     /// let mut rating_2 = glicko2::rating::Rating::new();
@@ -135,9 +141,9 @@ pub mod one_on_one {
     }
 
     /// Determines the quality of a matchup, where 1.0 (100%) is a perfect match.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// let mut rating_1 = glicko2::rating::Rating::new();
     /// let mut rating_2 = glicko2::rating::Rating::new();
@@ -165,10 +171,10 @@ pub mod match_result {
 
     /// Gets the constant float value associated with each outcome
     pub fn val(status: &Status) -> f64 {
-        return match status {
+        match status {
             Status::Win => constants::WIN,
             Status::Draw => constants::DRAW,
             Status::Loss => constants::LOSS,
-        };
+        }
     }
 }
