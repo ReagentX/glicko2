@@ -2,13 +2,13 @@
 // Expose the module
 pub mod glicko2;
 // Re-export so we can use these without reaching into the crate
-pub use crate::glicko2::{algorithm, rating, constants};
+pub use crate::glicko2::{algorithm, constants, rating};
 
 #[cfg(test)]
 mod tests {
     use crate::glicko2::algorithm;
     use crate::glicko2::constants::{EPSILON, MU, PHI, Q, RATIO, SIGMA, TAU};
-    use crate::glicko2::rating::{Rating, one_on_one, match_result};
+    use crate::glicko2::rating::{match_result, one_on_one, Rating};
 
     #[test]
     fn win() {
@@ -52,7 +52,7 @@ mod tests {
         assert_eq!(new_rating.mu, 1500.0);
         assert_eq!(new_rating.phi, 350.0);
         assert_eq!(new_rating.sigma, 0.006);
-        assert_eq!(new_rating.is_scaled, false);
+        assert!(!new_rating.is_scaled);
     }
 
     #[test]
@@ -63,7 +63,7 @@ mod tests {
         assert_eq!(new_rating.mu, 0.0);
         assert_eq!(new_rating.phi, 2.014761872416068);
         assert_eq!(new_rating.sigma, 0.006);
-        assert_eq!(new_rating.is_scaled, true);
+        assert!(new_rating.is_scaled);
     }
 
     #[test]
@@ -75,7 +75,7 @@ mod tests {
         assert_eq!(new_rating.mu, 0.0);
         assert_eq!(new_rating.phi, 2.014761872416068);
         assert_eq!(new_rating.sigma, 0.006);
-        assert_eq!(new_rating.is_scaled, true);
+        assert!(new_rating.is_scaled);
     }
 
     #[test]
@@ -87,7 +87,7 @@ mod tests {
         assert_eq!(new_rating.mu, 1500.0);
         assert_eq!(new_rating.phi, 350.0);
         assert_eq!(new_rating.sigma, 0.006);
-        assert_eq!(new_rating.is_scaled, false);
+        assert!(!new_rating.is_scaled);
     }
 
     #[test]
@@ -98,7 +98,7 @@ mod tests {
         assert_eq!(new_rating.mu, 1500.0);
         assert_eq!(new_rating.phi, 350.0);
         assert_eq!(new_rating.sigma, 0.006);
-        assert_eq!(new_rating.is_scaled, false);
+        assert!(!new_rating.is_scaled);
     }
 
     #[test]
@@ -147,7 +147,7 @@ mod tests {
         assert_eq!(new_rating.mu, 1643.2406803139988);
         assert_eq!(new_rating.phi, 297.7383025722689);
         assert_eq!(new_rating.sigma, 0.005999997552929708);
-        assert_eq!(new_rating.is_scaled, false);
+        assert!(!new_rating.is_scaled);
     }
 
     #[test]
@@ -164,13 +164,13 @@ mod tests {
         assert_eq!(new_rating.mu, 1643.2406803139988);
         assert_eq!(new_rating.phi, 297.7383025722689);
         assert_eq!(new_rating.sigma, 0.005999997552929708);
-        assert_eq!(new_rating.is_scaled, false);
+        assert!(!new_rating.is_scaled);
 
         println!("Other: {:?}", other_rating);
         assert_eq!(other_rating.mu, 1476.3887184474581);
         assert_eq!(other_rating.phi, 188.4371651087283);
         assert_eq!(other_rating.sigma, 0.005899995780089439);
-        assert_eq!(other_rating.is_scaled, false);
+        assert!(!other_rating.is_scaled);
     }
 
     #[test]
@@ -187,13 +187,13 @@ mod tests {
         assert_eq!(new_rating.mu, 1486.1105693882885);
         assert_eq!(new_rating.phi, 297.7383025710809);
         assert_eq!(new_rating.sigma, 0.0059999938227804145);
-        assert_eq!(new_rating.is_scaled, false);
+        assert!(!new_rating.is_scaled);
 
         println!("Other: {:?}", other_rating);
         assert_eq!(other_rating.mu, 1502.4424933614428);
         assert_eq!(other_rating.phi, 187.0189343872027);
         assert_eq!(other_rating.sigma, 0.005899991810542997);
-        assert_eq!(other_rating.is_scaled, false);
+        assert!(!other_rating.is_scaled);
     }
 
     #[test]
