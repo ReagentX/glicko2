@@ -56,11 +56,7 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
     // 1. Let a = ln(sigma^2)
     let alpha = rating.sigma.powi(2).ln();
 
-    // 2. Set the initial values for the iterative algorithm.
-    let mut a = alpha;
-    let mut b: f64;
-
-    // Optimality criterion as closure so we do not pass references for the above
+    // Define optimality criterion as a closure so we do not pass references for the above
     let optimality_criterion = |x: f64| -> f64 {
         let tmp = phi.powi(2) + variance + x.exp();
         let tmp_2 = 2.0 * tmp.powi(2);
@@ -69,15 +65,18 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
         a - b
     };
 
-    if diff_squared > (phi.powi(2) + variance) {
-        b = (diff_squared - phi.powi(2) - variance).ln();
+    // 2. Set the initial value for the iterative algorithm
+    let mut a = alpha;
+    let mut b = if diff_squared > (phi.powi(2) + variance) {
+        (diff_squared - phi.powi(2) - variance).ln()
     } else {
         let mut k = 1.0;
         while optimality_criterion(alpha - k * TAU) < 0.0 {
             k += 1.0;
         }
-        b = alpha - k * TAU;
-    }
+        alpha - k * TAU
+    };
+
     // 3. Let fA = optimality_criterion(A) and f(B) = optimality_criterion(B)
     let mut f_a = optimality_criterion(a);
     let mut f_b = optimality_criterion(b);
@@ -143,8 +142,8 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
 
     for (score, other_rating) in outcomes {
         other_rating.scale_down();
-        let impact = reduce_impact(&rating, &other_rating);
-        let expected = expect_score(&rating, &other_rating, impact);
+        let impact = reduce_impact(rating, other_rating);
+        let expected = expect_score(rating, other_rating, impact);
         let expected_inv = expected * (1.0 - expected);
         variance_inv += impact.powi(2) * expected_inv;
         difference += impact * (val(&score) - expected);
@@ -160,7 +159,7 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
 
     // Step 5. Determine the new value, Sigma', or the sigma. This
     //         computation requires iteration.
-    let sigma = determine_sigma(&rating, &difference, &variance);
+    let sigma = determine_sigma(rating, &difference, &variance);
 
     // Step 6. Update the rating deviation to the new pre-rating period
     //         value, Phi*.
