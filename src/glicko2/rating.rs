@@ -84,7 +84,7 @@ pub mod one_on_one {
     use crate::glicko2::algorithm;
     use crate::glicko2::rating::Rating;
 
-    /// Updates ratings for two teams, where `rating1` beat `rating2`.
+    /// Updates ratings for two teams
     /// If the game was a draw, pass `drawn` as `true`.
     ///
     /// # Example
@@ -94,28 +94,28 @@ pub mod one_on_one {
     /// let mut rating_2 = glicko2::rating::Rating::new();
     /// let (rating_1, rating_2) = glicko2::rating::one_on_one::rate(rating_1, rating_2, false);
     /// ```
-    pub fn rate(mut rating1: Rating, mut rating2: Rating, drawn: bool) -> (Rating, Rating) {
+    pub fn rate(mut winner: Rating, mut loser: Rating, drawn: bool) -> (Rating, Rating) {
         // drawn is false if Team 1 beat Team 2
         if drawn {
             algorithm::rate(
-                &mut rating1,
-                vec![(super::match_result::Status::Draw, &mut rating2)],
+                &mut winner,
+                vec![(super::match_result::Status::Draw, &mut loser)],
             );
             algorithm::rate(
-                &mut rating2,
-                vec![(super::match_result::Status::Draw, &mut rating1)],
+                &mut loser,
+                vec![(super::match_result::Status::Draw, &mut winner)],
             );
         } else {
             algorithm::rate(
-                &mut rating1,
-                vec![(super::match_result::Status::Win, &mut rating2)],
+                &mut winner,
+                vec![(super::match_result::Status::Win, &mut loser)],
             );
             algorithm::rate(
-                &mut rating2,
-                vec![(super::match_result::Status::Loss, &mut rating1)],
+                &mut loser,
+                vec![(super::match_result::Status::Loss, &mut winner)],
             );
         };
-        (rating1, rating2)
+        (winner, loser)
     }
 
     /// Determines the odds the first team will beat the second team
