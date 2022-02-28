@@ -1,4 +1,6 @@
 #![allow(dead_code)]
+#[doc = include_str!("../README.md")]
+
 // Expose the module
 pub mod glicko2;
 // Re-export so we can use these without reaching into the crate
