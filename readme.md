@@ -1,22 +1,48 @@
 # Glicko2 (Rust Edition)
 
-Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games.
+Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games. This is a zero-dependency Rust library implementing this algorithm.
 
 ## Sample Usage
 
-```rust
-use crate::glicko2::rating;
+To update a single matchup:
 
-// Create a rating object for each team
-let rating_1 = rating::make_rating();
-let rating_2 = rating::make_rating();
+```rust
+use crate::glicko2::rating::{Rating, one_on_one};
+
+// Create a Rating stuct for each team
+let rating_1 = Rating::new();
+let rating_2 = Rating::new();
 
 // Update ratings for team_1 beating team_2
-let (rating_1, rating_2) = rating::one_on_one::rate(rating_1, rating_2, false);
+let (rating_1, rating_2) = one_on_one::rate(rating_1, rating_2, false);
 
 // Get odds (percent chance team_1 beats team_2)
-let odds = rating::one_on_one::odds(rating_1, rating_2);
-println!("{:?}", odds); // 0.7086337899806349
+let odds = one_on_one::odds(rating_1, rating_2);
+println!("{}", odds); // 0.7086337899806349
+```
+
+To update a series of matchups:
+
+```rust
+use crate::glicko2::{rating::{Rating, match_result}, algorithm};
+
+// Create a Rating stuct for each team
+let mut team_to_update = Rating::new();
+let mut opponent_1 = Rating::new();
+let mut opponent_2 = Rating::new();
+let mut opponent_3 = Rating::new();
+
+// Rate our team against a vector of matchup results
+algorithm::rate(
+    &mut team_to_update,
+    vec![(match_result::Status::Win, &mut opponent_1),
+         (match_result::Status::Loss, &mut opponent_2),
+         (match_result::Status::Draw, &mut opponent_3),
+    ]
+);
+
+// Print our updated rating
+println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, is_scaled: false }
 ```
 
 ## Rating
