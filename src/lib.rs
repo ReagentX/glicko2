@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-#[doc = include_str!("../README.md")]
+#[doc = include_str!("../readme.md")]
 
 // Expose the module
 pub mod glicko2;
