@@ -4,13 +4,11 @@ on:
   release:
     types: [released]
 
-
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   Publish:
-
     runs-on: ubuntu-latest
 
     steps:
