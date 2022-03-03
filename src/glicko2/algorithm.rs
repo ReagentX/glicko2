@@ -1,4 +1,6 @@
-//! The math behind the Glicko2 algorithm
+/*!
+The math behind the Glicko2 algorithm
+*/
 
 use crate::glicko2::constants::{EPSILON, TAU};
 use crate::glicko2::rating::match_result::val;

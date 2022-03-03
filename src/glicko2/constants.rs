@@ -1,4 +1,6 @@
-//! Constants required by the Glicko2 Algorithm
+/*!
+Constants required by the Glicko2 Algorithm
+*/
 
 /// Default rating
 pub const MU: f64 = 1500.0;

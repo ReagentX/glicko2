@@ -1,4 +1,6 @@
-//! Data structures and convienience methods for creating and interacting with rating data
+/*!
+Data structures and convenience methods for creating and interacting with rating data
+*/
 
 use crate::glicko2::constants;
 
