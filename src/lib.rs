@@ -3,7 +3,7 @@
 // Expose the module
 pub mod glicko2;
 // Re-export so we can use these without reaching into the crate
-pub use crate::glicko2::{algorithm, constants, rating, game};
+pub use crate::glicko2::{algorithm, constants, game, rating};
 
 #[cfg(test)]
 mod tests {
@@ -11,7 +11,7 @@ mod tests {
         algorithm,
         constants::{EPSILON, MU, PHI, RATIO, SIGMA, TAU},
         game,
-        rating::{Rating},
+        rating::Rating,
     };
 
     #[test]
@@ -142,7 +142,10 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        algorithm::rate(&mut new_rating, vec![(game::Status::Win, &mut other_rating)]);
+        algorithm::rate(
+            &mut new_rating,
+            vec![(game::Status::Win, &mut other_rating)],
+        );
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2419919603035);
         assert_eq!(new_rating.phi, 297.73966575502345);
@@ -152,14 +155,14 @@ mod tests {
 
     #[test]
     fn rate_win() {
-        let new_rating = Rating::new();
-        let other_rating = Rating {
+        let mut new_rating = Rating::new();
+        let mut other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
             is_scaled: false,
         };
-        let (new_rating, other_rating) = game::compete(new_rating, other_rating, false);
+        game::compete(&mut new_rating, &mut other_rating, false);
         println!("New: {:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2419919603035);
         assert_eq!(new_rating.phi, 297.73966575502345);
@@ -175,14 +178,16 @@ mod tests {
 
     #[test]
     fn rate_draw() {
-        let new_rating = Rating::new();
-        let other_rating = Rating {
+        let mut new_rating = Rating::new();
+        let mut other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
             is_scaled: false,
         };
-        let (new_rating, other_rating) = game::compete(new_rating, other_rating, true);
+
+        game::compete(&mut new_rating, &mut other_rating, true);
+
         println!("New: {:?}", new_rating);
         assert_eq!(new_rating.mu, 1486.1104422036067);
         assert_eq!(new_rating.phi, 297.73966575383554);
@@ -199,42 +204,42 @@ mod tests {
     #[test]
     fn odds() {
         // Create a rating object for each team
-        let rating_1 = Rating::new();
-        let rating_2 = Rating::new();
+        let mut rating_1 = Rating::new();
+        let mut rating_2 = Rating::new();
 
         // Update ratings for team_1 beating team_2
-        let (rating_1, rating_2) = game::compete(rating_1, rating_2, false);
+        game::compete(&mut rating_1, &mut rating_2, false);
 
         // Get odds (percent chance team_1 beats team_2)
-        let odds = game::odds(rating_1, rating_2);
+        let odds = game::odds(&mut rating_1, &mut rating_2);
         println!("{:?}", odds);
         assert_eq!(odds, 0.7086345168430092);
     }
 
     #[test]
     fn quality_team_1_advantage() {
-        let new_rating = Rating::new();
-        let other_rating = Rating {
+        let mut new_rating = Rating::new();
+        let mut other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = game::quality(new_rating, other_rating);
+        let quality = game::quality(&mut new_rating, &mut other_rating);
         println!("{:?}", quality);
         assert_eq!(quality, 0.9116055444116669);
     }
 
     #[test]
     fn quality_team_2_advantage() {
-        let new_rating = Rating::new();
-        let other_rating = Rating {
+        let mut new_rating = Rating::new();
+        let mut other_rating = Rating {
             mu: 1450.0,
             phi: 200.0,
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = game::quality(other_rating, new_rating);
+        let quality = game::quality(&mut other_rating, &mut new_rating);
         println!("{:?}", quality);
         assert_eq!(quality, 0.9116055444116669);
     }
