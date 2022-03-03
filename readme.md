@@ -9,7 +9,7 @@ The most common usage is to update a series of matches for each team, but this l
 ### To update a series of matchups
 
 ```rust
-use glicko2::{rating::Rating, game::Status, algorithm};
+use glicko2::{Rating, game::Status, algorithm};
 
 /// Create a Rating struct for each team
 let mut team_to_update = Rating::new();
@@ -37,7 +37,7 @@ println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, i
 ### To get the odds one team will beat another
 
 ```rust
-use glicko2::{rating::Rating, game};
+use glicko2::{Rating, game};
 
 /// Create a Rating struct for each team
 let mut rating_1 = Rating::new();
@@ -51,7 +51,7 @@ println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
 ### To determine the quality of a matchup
 
 ```rust
-use glicko2::{rating::Rating, game};
+use glicko2::{Rating, game};
 
 /// Create a Rating struct for each team
 let mut rating_1 = Rating::new();
@@ -65,7 +65,7 @@ println!("{}", quality); // 1.0, perfect matchup since both teams have the same 
 ### To update both team's ratings for a single matchup
 
 ```rust
-use glicko2::{rating::Rating, game};
+use glicko2::{Rating, game};
 
 /// Create a Rating struct for each team
 let mut rating_1 = Rating::new();

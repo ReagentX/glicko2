@@ -9,7 +9,7 @@ use crate::glicko2::{algorithm, constants, rating::Rating};
 /// # Example
 ///
 /// ```
-/// use glicko2::{rating::Rating, game};
+/// use glicko2::{Rating, game};
 ///
 /// let mut rating_1 = Rating::new();
 /// let mut rating_2 = Rating::new();
@@ -32,7 +32,7 @@ pub fn compete(winner: &mut Rating, loser: &mut Rating, drawn: bool) {
 /// # Example
 ///
 /// ```
-/// use glicko2::{rating::Rating, game};
+/// use glicko2::{Rating, game};
 ///
 /// let mut rating_1 = Rating::new();
 /// let mut rating_2 = Rating::new();
@@ -54,7 +54,7 @@ pub fn odds(rating1: &mut Rating, rating2: &mut Rating) -> f64 {
 /// # Example
 ///
 /// ```
-/// use glicko2::{rating::Rating, game};
+/// use glicko2::{Rating, game};
 ///
 /// let mut rating_1 = Rating::new();
 /// let mut rating_2 = Rating::new();

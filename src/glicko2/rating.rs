@@ -18,7 +18,7 @@ impl Rating {
     ///
     /// # Example
     /// ```
-    /// use glicko2::rating::Rating;
+    /// use glicko2::Rating;
     ///
     /// let team_1 = Rating::new();
     /// ```
@@ -34,7 +34,7 @@ impl Rating {
     /// Scales a rating down to the Glicko2 scale
     /// # Example
     /// ```
-    /// use glicko2::rating::Rating;
+    /// use glicko2::Rating;
     ///
     /// let mut new_rating = Rating::new();
     /// new_rating.scale_down();
@@ -52,7 +52,7 @@ impl Rating {
     /// Scales a rating down to the nominal scale
     /// # Example
     /// ```
-    /// use glicko2::rating::Rating;
+    /// use glicko2::Rating;
     ///
     /// let mut new_rating = Rating::new();
     /// new_rating.scale_up();
@@ -70,7 +70,7 @@ impl Rating {
     /// Decay a rating for a team that has not played during a period
     /// # Example
     /// ```
-    /// use glicko2::rating::Rating;
+    /// use glicko2::Rating;
     ///
     /// let mut new_rating = Rating::new();
     /// new_rating.decay();

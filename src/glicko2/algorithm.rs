@@ -12,7 +12,7 @@ use crate::glicko2::{
 /// # Example
 ///
 /// ```
-/// use glicko2::{rating::Rating, algorithm};
+/// use glicko2::{Rating, algorithm};
 ///
 /// let mut team_1 = Rating::new();
 /// let mut team_2 = Rating::new();
@@ -39,7 +39,7 @@ pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
 /// # Example
 ///
 /// ```
-/// use glicko2::{rating::Rating, algorithm};
+/// use glicko2::{Rating, algorithm};
 ///
 /// let mut team_1 = Rating::new();
 /// let mut team_2 = Rating::new();
@@ -122,7 +122,7 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
 /// # Example
 ///
 /// ```
-/// use glicko2::{rating::Rating, game::Status};
+/// use glicko2::{Rating, game::Status};
 ///
 /// let mut team_to_update = Rating::new();
 /// let mut opponent_1 = Rating::new();
