@@ -3,14 +3,14 @@
 // Expose the module
 pub mod glicko2;
 // Re-export so we can use these without reaching into the crate
-pub use crate::glicko2::{algorithm, constants, rating, one_on_one};
+pub use crate::glicko2::{algorithm, constants, rating, game};
 
 #[cfg(test)]
 mod tests {
     use crate::glicko2::{
         algorithm,
         constants::{EPSILON, MU, PHI, RATIO, SIGMA, TAU},
-        one_on_one,
+        game,
         rating::{Rating, Status},
     };
 
@@ -159,7 +159,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let (new_rating, other_rating) = one_on_one::rate(new_rating, other_rating, false);
+        let (new_rating, other_rating) = game::compete(new_rating, other_rating, false);
         println!("New: {:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2419919603035);
         assert_eq!(new_rating.phi, 297.73966575502345);
@@ -182,7 +182,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let (new_rating, other_rating) = one_on_one::rate(new_rating, other_rating, true);
+        let (new_rating, other_rating) = game::compete(new_rating, other_rating, true);
         println!("New: {:?}", new_rating);
         assert_eq!(new_rating.mu, 1486.1104422036067);
         assert_eq!(new_rating.phi, 297.73966575383554);
@@ -203,10 +203,10 @@ mod tests {
         let rating_2 = Rating::new();
 
         // Update ratings for team_1 beating team_2
-        let (rating_1, rating_2) = one_on_one::rate(rating_1, rating_2, false);
+        let (rating_1, rating_2) = game::compete(rating_1, rating_2, false);
 
         // Get odds (percent chance team_1 beats team_2)
-        let odds = one_on_one::odds(rating_1, rating_2);
+        let odds = game::odds(rating_1, rating_2);
         println!("{:?}", odds);
         assert_eq!(odds, 0.7086345168430092);
     }
@@ -220,7 +220,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = one_on_one::quality(new_rating, other_rating);
+        let quality = game::quality(new_rating, other_rating);
         println!("{:?}", quality);
         assert_eq!(quality, 0.9116055444116669);
     }
@@ -234,7 +234,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        let quality = one_on_one::quality(other_rating, new_rating);
+        let quality = game::quality(other_rating, new_rating);
         println!("{:?}", quality);
         assert_eq!(quality, 0.9116055444116669);
     }

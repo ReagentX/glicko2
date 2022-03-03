@@ -33,14 +33,14 @@ println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, i
 ### To update both team's ratings for a single matchup
 
 ```rust
-use glicko2::{rating::Rating, one_on_one};
+use glicko2::{rating::Rating, game};
 
 /// Create a Rating struct for each team
 let rating_1 = Rating::new();
 let rating_2 = Rating::new();
 
 /// Update ratings for team_1 beating team_2
-let (rating_1, rating_2) = one_on_one::rate(rating_1, rating_2, false);
+let (rating_1, rating_2) = game::compete(rating_1, rating_2, false);
 
 /// Print our updated ratings
 println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059, is_scaled: false }
@@ -50,28 +50,28 @@ println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_sca
 ### To get the odds one team will beat another
 
 ```rust
-use glicko2::{rating::Rating, one_on_one};
+use glicko2::{rating::Rating, game};
 
 /// Create a Rating struct for each team
 let rating_1 = Rating::new();
 let rating_2 = Rating::new();
 
 /// Get odds (percent chance team_1 beats team_2)
-let odds = one_on_one::odds(rating_1, rating_2);
+let odds = game::odds(rating_1, rating_2);
 println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
 ```
 
 ### To determine the quality of a matchup
 
 ```rust
-use glicko2::{rating::Rating, one_on_one};
+use glicko2::{rating::Rating, game};
 
 /// Create a Rating struct for each team
 let rating_1 = Rating::new();
 let rating_2 = Rating::new();
 
 /// Get odds (the advantage team 1 has over team 2)
-let quality = one_on_one::quality(rating_1, rating_2);
+let quality = game::quality(rating_1, rating_2);
 println!("{}", quality); // 1.0, perfect matchup since both teams have the same rating
 ```
 
