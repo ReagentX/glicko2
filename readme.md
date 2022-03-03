@@ -16,6 +16,7 @@ let mut team_to_update = Rating::new();
 let mut opponent_1 = Rating::new();
 let mut opponent_2 = Rating::new();
 let mut opponent_3 = Rating::new();
+let mut opponent_4 = Rating::new();
 
 /// Rate our team against a vector of matchup results
 algorithm::rate(
@@ -25,6 +26,9 @@ algorithm::rate(
          (Status::Draw, &mut opponent_3),
     ]
 );
+
+/// Opponent 4 did not play, so their rating must be decayed
+opponent_4.decay();
 
 /// Print our updated rating
 println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, is_scaled: false }
