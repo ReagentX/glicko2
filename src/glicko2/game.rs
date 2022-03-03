@@ -12,9 +12,9 @@ use crate::glicko2::rating::{Rating, Status};
 /// ```
 /// let mut rating_1 = glicko2::rating::Rating::new();
 /// let mut rating_2 = glicko2::rating::Rating::new();
-/// let (rating_1, rating_2) = glicko2::one_on_one::rate(rating_1, rating_2, false);
+/// let (rating_1, rating_2) = glicko2::game::compete(rating_1, rating_2, false);
 /// ```
-pub fn rate(mut winner: Rating, mut loser: Rating, drawn: bool) -> (Rating, Rating) {
+pub fn compete(mut winner: Rating, mut loser: Rating, drawn: bool) -> (Rating, Rating) {
     // drawn is false if Team 1 beat Team 2
     if drawn {
         algorithm::rate(&mut winner, vec![(Status::Draw, &mut loser)]);
@@ -33,7 +33,7 @@ pub fn rate(mut winner: Rating, mut loser: Rating, drawn: bool) -> (Rating, Rati
 /// ```
 /// let mut rating_1 = glicko2::rating::Rating::new();
 /// let mut rating_2 = glicko2::rating::Rating::new();
-/// let odds = glicko2::one_on_one::odds(rating_1, rating_2);
+/// let odds = glicko2::game::odds(rating_1, rating_2);
 /// ```
 pub fn odds(mut rating1: Rating, mut rating2: Rating) -> f64 {
     rating1.scale_down();
@@ -55,7 +55,7 @@ pub fn odds(mut rating1: Rating, mut rating2: Rating) -> f64 {
 /// ```
 /// let mut rating_1 = glicko2::rating::Rating::new();
 /// let mut rating_2 = glicko2::rating::Rating::new();
-/// let quality = glicko2::one_on_one::quality(rating_1, rating_2);
+/// let quality = glicko2::game::quality(rating_1, rating_2);
 /// ```
 pub fn quality(rating1: Rating, rating2: Rating) -> f64 {
     // 1.0 if perfect match
