@@ -3,7 +3,7 @@
 // Expose the module
 pub mod glicko2;
 // Re-export so we can use these without reaching into the crate
-pub use crate::glicko2::{algorithm, constants, game, rating};
+pub use crate::glicko2::{algorithm, constants, game, rating::Rating};
 
 #[cfg(test)]
 mod tests {
