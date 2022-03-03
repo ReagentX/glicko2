@@ -83,6 +83,32 @@ impl Default for Rating {
     }
 }
 
+/// Enum for the Glicko2 values for match outcomes
+#[derive(Debug)]
+pub enum Status {
+    Win,
+    Draw,
+    Loss,
+}
+
+impl Status {
+    /// Gets the constant float value associated with each outcome
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// let loss = glicko2::rating::Status::Loss;
+    /// let loss_val = loss.val();
+    /// ```
+    pub fn val(&self) -> f64 {
+        match self {
+            Status::Win => constants::WIN,
+            Status::Draw => constants::DRAW,
+            Status::Loss => constants::LOSS,
+        }
+    }
+}
+
 /// Provides functions to handle a single one on one game and update ratings accordingly
 pub mod one_on_one {
     use crate::glicko2::algorithm;
@@ -101,23 +127,11 @@ pub mod one_on_one {
     pub fn rate(mut winner: Rating, mut loser: Rating, drawn: bool) -> (Rating, Rating) {
         // drawn is false if Team 1 beat Team 2
         if drawn {
-            algorithm::rate(
-                &mut winner,
-                vec![(super::match_result::Status::Draw, &mut loser)],
-            );
-            algorithm::rate(
-                &mut loser,
-                vec![(super::match_result::Status::Draw, &mut winner)],
-            );
+            algorithm::rate(&mut winner, vec![(super::Status::Draw, &mut loser)]);
+            algorithm::rate(&mut loser, vec![(super::Status::Draw, &mut winner)]);
         } else {
-            algorithm::rate(
-                &mut winner,
-                vec![(super::match_result::Status::Win, &mut loser)],
-            );
-            algorithm::rate(
-                &mut loser,
-                vec![(super::match_result::Status::Loss, &mut winner)],
-            );
+            algorithm::rate(&mut winner, vec![(super::Status::Win, &mut loser)]);
+            algorithm::rate(&mut loser, vec![(super::Status::Loss, &mut winner)]);
         };
         (winner, loser)
     }
@@ -159,33 +173,5 @@ pub mod one_on_one {
         let expected_score_2 = odds(rating2, rating1);
         let advantage = expected_score_1 - expected_score_2; // Advantage team 1 has over team 2
         1.0 - advantage.abs()
-    }
-}
-
-/// Enums for the Glicko2 values for match outcomes
-pub mod match_result {
-    use crate::glicko2::constants;
-
-    #[derive(Debug)]
-    pub enum Status {
-        Win,
-        Draw,
-        Loss,
-    }
-
-    /// Gets the constant float value associated with each outcome
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// let loss = glicko2::rating::match_result::Status::Loss;
-    /// let loss_val = glicko2::rating::match_result::val(&loss);
-    /// ```
-    pub fn val(status: &Status) -> f64 {
-        match status {
-            Status::Win => constants::WIN,
-            Status::Draw => constants::DRAW,
-            Status::Loss => constants::LOSS,
-        }
     }
 }
