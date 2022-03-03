@@ -83,7 +83,7 @@ impl Default for Rating {
     }
 }
 
-/// Enum for the Glicko2 values for match outcomes
+/// Enum representing the Glicko2 values for match outcomes
 #[derive(Debug)]
 pub enum Status {
     Win,
