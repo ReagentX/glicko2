@@ -174,6 +174,13 @@ pub mod match_result {
     }
 
     /// Gets the constant float value associated with each outcome
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// let loss = glicko2::rating::match_result::Status::Loss;
+    /// let loss_val = glicko2::rating::match_result::val(&loss);
+    /// ```
     pub fn val(status: &Status) -> f64 {
         match status {
             Status::Win => constants::WIN,
