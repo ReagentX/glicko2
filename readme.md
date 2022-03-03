@@ -79,7 +79,6 @@ println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059, is_sca
 println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_scaled: false }
 ```
 
-
 ## Rating
 
 Each side of a 1v1 competition is assigned a rating and a rating deviation. The rating represents the skill of a player or team, and the rating deviation measures confidence in the rating value.
