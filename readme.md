@@ -56,7 +56,7 @@ use glicko2::rating::{Rating, one_on_one};
 let rating_1 = Rating::new();
 let rating_2 = Rating::new();
 
-/// Get odds (percent chance team_1 beats team_2)
+/// Get quality (the advantage team 1 has over team 2)
 let odds = one_on_one::odds(rating_1, rating_2);
 println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
 ```
