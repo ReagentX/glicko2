@@ -1,21 +1,26 @@
 /*!
 The math behind the Glicko2 algorithm
 */
-
-use crate::glicko2::constants::{EPSILON, TAU};
-use crate::glicko2::rating::Status;
-use crate::glicko2::rating::Rating;
+use crate::glicko2::{
+    constants::{EPSILON, TAU},
+    game::Status,
+    rating::Rating,
+};
 
 /// This function reduces the impact of games as a function of an opponent's rating deviation.
 ///
 /// # Example
 ///
 /// ```
-/// let mut team_1 = glicko2::rating::Rating::new();
-/// let mut team_2 = glicko2::rating::Rating::new();
+/// use glicko2::{rating::Rating, algorithm};
+///
+/// let mut team_1 = Rating::new();
+/// let mut team_2 = Rating::new();
+///
 /// team_1.scale_down();
 /// team_2.scale_down();
-/// let impact = glicko2::algorithm::reduce_impact(&team_1, &team_2);
+///
+/// let impact = algorithm::reduce_impact(&team_1, &team_2);
 /// ```
 pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
     // Must be called for scaled ratings
@@ -34,14 +39,17 @@ pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
 /// # Example
 ///
 /// ```
-/// let mut team_1 = glicko2::rating::Rating::new();
-/// let mut team_2 = glicko2::rating::Rating::new();
+/// use glicko2::{rating::Rating, algorithm};
+///
+/// let mut team_1 = Rating::new();
+/// let mut team_2 = Rating::new();
 /// team_1.scale_down();
 /// team_2.scale_down();
-/// let expected_score = glicko2::algorithm::expect_score(
+///
+/// let expected_score = algorithm::expect_score(
 ///     &team_1,
 ///     &team_2,
-///     glicko2::algorithm::reduce_impact(&team_1, &team_2),
+///     algorithm::reduce_impact(&team_1, &team_2),
 /// );
 /// ```
 pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 {
@@ -114,15 +122,18 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
 /// # Example
 ///
 /// ```
-/// let mut team_to_update = glicko2::rating::Rating::new();
-/// let mut opponent_1 = glicko2::rating::Rating::new();
-/// let mut opponent_2 = glicko2::rating::Rating::new();
-/// let mut opponent_3 = glicko2::rating::Rating::new();
+/// use glicko2::{rating::Rating, game::Status};
+///
+/// let mut team_to_update = Rating::new();
+/// let mut opponent_1 = Rating::new();
+/// let mut opponent_2 = Rating::new();
+/// let mut opponent_3 = Rating::new();
+///
 /// glicko2::algorithm::rate(
 ///     &mut team_to_update,
-///     vec![(glicko2::rating::Status::Win, &mut opponent_1),
-///          (glicko2::rating::Status::Loss, &mut opponent_2),
-///          (glicko2::rating::Status::Draw, &mut opponent_3),
+///     vec![(Status::Win, &mut opponent_1),
+///          (Status::Loss, &mut opponent_2),
+///          (Status::Draw, &mut opponent_3),
 ///      ]
 /// );
 /// ```
