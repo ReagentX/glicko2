@@ -18,7 +18,9 @@ impl Rating {
     ///
     /// # Example
     /// ```
-    /// let team_1 = glicko2::rating::Rating::new();
+    /// use glicko2::rating::Rating;
+    /// 
+    /// let team_1 = Rating::new();
     /// ```
     pub fn new() -> Rating {
         Rating {
@@ -32,7 +34,9 @@ impl Rating {
     /// Scales a rating down to the Glicko2 scale
     /// # Example
     /// ```
-    /// let mut new_rating = glicko2::rating::Rating::new();
+    /// use glicko2::rating::Rating;
+    /// 
+    /// let mut new_rating = Rating::new();
     /// new_rating.scale_down();
     /// ```
     pub fn scale_down(&mut self) {
@@ -48,7 +52,9 @@ impl Rating {
     /// Scales a rating down to the nominal scale
     /// # Example
     /// ```
-    /// let mut new_rating = glicko2::rating::Rating::new();
+    /// use glicko2::rating::Rating;
+    /// 
+    /// let mut new_rating = Rating::new();
     /// new_rating.scale_up();
     /// ```
     pub fn scale_up(&mut self) {
@@ -64,7 +70,9 @@ impl Rating {
     /// Decay a rating for a team that has not played during a period
     /// # Example
     /// ```
-    /// let mut new_rating = glicko2::rating::Rating::new();
+    /// use glicko2::rating::Rating;
+    /// 
+    /// let mut new_rating = Rating::new();
     /// new_rating.decay();
     /// ```
     pub fn decay(&mut self) {
@@ -80,31 +88,5 @@ impl Rating {
 impl Default for Rating {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-/// Enum representing the Glicko2 values for match outcomes
-#[derive(Debug)]
-pub enum Status {
-    Win,
-    Draw,
-    Loss,
-}
-
-impl Status {
-    /// Gets the constant float value associated with each outcome
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// let loss = glicko2::rating::Status::Loss;
-    /// let loss_val = loss.val();
-    /// ```
-    pub fn val(&self) -> f64 {
-        match self {
-            Status::Win => constants::WIN,
-            Status::Draw => constants::DRAW,
-            Status::Loss => constants::LOSS,
-        }
     }
 }

@@ -11,12 +11,12 @@ mod tests {
         algorithm,
         constants::{EPSILON, MU, PHI, RATIO, SIGMA, TAU},
         game,
-        rating::{Rating, Status},
+        rating::{Rating},
     };
 
     #[test]
     fn win() {
-        let win = Status::Win;
+        let win = game::Status::Win;
         let win_val = win.val();
         println!("{:?}\t{:?}", win, win_val);
         assert_eq!(win_val, 1.)
@@ -24,7 +24,7 @@ mod tests {
 
     #[test]
     fn draw() {
-        let draw = Status::Draw;
+        let draw = game::Status::Draw;
         let draw_val = draw.val();
         println!("{:?}\t{:?}", draw, draw_val);
         assert_eq!(draw_val, 0.5)
@@ -32,7 +32,7 @@ mod tests {
 
     #[test]
     fn loss() {
-        let loss = Status::Loss;
+        let loss = game::Status::Loss;
         let loss_val = loss.val();
         println!("{:?}\t{:?}", loss, loss_val);
         assert_eq!(loss_val, 0.0)
@@ -142,7 +142,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        algorithm::rate(&mut new_rating, vec![(Status::Win, &mut other_rating)]);
+        algorithm::rate(&mut new_rating, vec![(game::Status::Win, &mut other_rating)]);
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2419919603035);
         assert_eq!(new_rating.phi, 297.73966575502345);
