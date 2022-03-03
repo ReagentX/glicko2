@@ -9,28 +9,28 @@ pub use crate::glicko2::{algorithm, constants, rating};
 mod tests {
     use crate::glicko2::algorithm;
     use crate::glicko2::constants::{EPSILON, MU, PHI, RATIO, SIGMA, TAU};
-    use crate::glicko2::rating::{match_result, one_on_one, Rating};
+    use crate::glicko2::rating::{one_on_one, Rating, Status};
 
     #[test]
     fn win() {
-        let win = match_result::Status::Win;
-        let win_val = match_result::val(&win);
+        let win = Status::Win;
+        let win_val = win.val();
         println!("{:?}\t{:?}", win, win_val);
         assert_eq!(win_val, 1.)
     }
 
     #[test]
     fn draw() {
-        let draw = match_result::Status::Draw;
-        let draw_val = match_result::val(&draw);
+        let draw = Status::Draw;
+        let draw_val = draw.val();
         println!("{:?}\t{:?}", draw, draw_val);
         assert_eq!(draw_val, 0.5)
     }
 
     #[test]
     fn loss() {
-        let loss = match_result::Status::Loss;
-        let loss_val = match_result::val(&loss);
+        let loss = Status::Loss;
+        let loss_val = loss.val();
         println!("{:?}\t{:?}", loss, loss_val);
         assert_eq!(loss_val, 0.0)
     }
@@ -139,10 +139,7 @@ mod tests {
             sigma: 0.0059,
             is_scaled: false,
         };
-        algorithm::rate(
-            &mut new_rating,
-            vec![(match_result::Status::Win, &mut other_rating)],
-        );
+        algorithm::rate(&mut new_rating, vec![(Status::Win, &mut other_rating)]);
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2419919603035);
         assert_eq!(new_rating.phi, 297.73966575502345);

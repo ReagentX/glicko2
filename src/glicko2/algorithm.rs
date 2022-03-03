@@ -3,8 +3,7 @@ The math behind the Glicko2 algorithm
 */
 
 use crate::glicko2::constants::{EPSILON, TAU};
-use crate::glicko2::rating::match_result::val;
-use crate::glicko2::rating::match_result::Status;
+use crate::glicko2::rating::Status;
 use crate::glicko2::rating::Rating;
 
 /// This function reduces the impact of games as a function of an opponent's rating deviation.
@@ -121,9 +120,9 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
 /// let mut opponent_3 = glicko2::rating::Rating::new();
 /// glicko2::algorithm::rate(
 ///     &mut team_to_update,
-///     vec![(glicko2::rating::match_result::Status::Win, &mut opponent_1),
-///          (glicko2::rating::match_result::Status::Loss, &mut opponent_2),
-///          (glicko2::rating::match_result::Status::Draw, &mut opponent_3),
+///     vec![(glicko2::rating::Status::Win, &mut opponent_1),
+///          (glicko2::rating::Status::Loss, &mut opponent_2),
+///          (glicko2::rating::Status::Draw, &mut opponent_3),
 ///      ]
 /// );
 /// ```
@@ -149,7 +148,7 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
         let expected = expect_score(rating, other_rating, impact);
         let expected_inv = expected * (1.0 - expected);
         variance_inv += impact.powi(2) * expected_inv;
-        difference += impact * (val(&score) - expected);
+        difference += impact * (score.val() - expected);
         other_rating.scale_up();
     }
 

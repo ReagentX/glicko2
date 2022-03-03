@@ -9,7 +9,7 @@ The most common usage is to update a series of matches for each team, but this l
 ### To update a series of matchups
 
 ```rust
-use glicko2::{rating::{Rating, match_result::Status}, algorithm};
+use glicko2::{rating::{Rating, Status}, algorithm};
 
 /// Create a Rating struct for each team
 let mut team_to_update = Rating::new();
