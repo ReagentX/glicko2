@@ -61,7 +61,7 @@ pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 
 }
 
 /// Determine the new value for volatility given a set of ratings.
-pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
+fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
     let phi = rating.phi;
     let diff_squared = difference.powi(2);
     // 1. Let a = ln(sigma^2)
