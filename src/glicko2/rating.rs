@@ -19,7 +19,7 @@ impl Rating {
     /// # Example
     /// ```
     /// use glicko2::rating::Rating;
-    /// 
+    ///
     /// let team_1 = Rating::new();
     /// ```
     pub fn new() -> Rating {
@@ -35,7 +35,7 @@ impl Rating {
     /// # Example
     /// ```
     /// use glicko2::rating::Rating;
-    /// 
+    ///
     /// let mut new_rating = Rating::new();
     /// new_rating.scale_down();
     /// ```
@@ -53,7 +53,7 @@ impl Rating {
     /// # Example
     /// ```
     /// use glicko2::rating::Rating;
-    /// 
+    ///
     /// let mut new_rating = Rating::new();
     /// new_rating.scale_up();
     /// ```
@@ -71,7 +71,7 @@ impl Rating {
     /// # Example
     /// ```
     /// use glicko2::rating::Rating;
-    /// 
+    ///
     /// let mut new_rating = Rating::new();
     /// new_rating.decay();
     /// ```
