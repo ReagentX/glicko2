@@ -33,7 +33,7 @@ println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, i
 ### To update both team's ratings for a single matchup
 
 ```rust
-use glicko2::rating::{Rating, one_on_one};
+use glicko2::{rating::Rating, one_on_one};
 
 /// Create a Rating struct for each team
 let rating_1 = Rating::new();
@@ -50,7 +50,7 @@ println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_sca
 ### To get the odds one team will beat another
 
 ```rust
-use glicko2::rating::{Rating, one_on_one};
+use glicko2::{rating::Rating, one_on_one};
 
 /// Create a Rating struct for each team
 let rating_1 = Rating::new();
@@ -64,7 +64,7 @@ println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
 ### To determine the quality of a matchup
 
 ```rust
-use glicko2::rating::{Rating, one_on_one};
+use glicko2::{rating::Rating, one_on_one};
 
 /// Create a Rating struct for each team
 let rating_1 = Rating::new();

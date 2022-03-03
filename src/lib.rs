@@ -3,13 +3,16 @@
 // Expose the module
 pub mod glicko2;
 // Re-export so we can use these without reaching into the crate
-pub use crate::glicko2::{algorithm, constants, rating};
+pub use crate::glicko2::{algorithm, constants, rating, one_on_one};
 
 #[cfg(test)]
 mod tests {
-    use crate::glicko2::algorithm;
-    use crate::glicko2::constants::{EPSILON, MU, PHI, RATIO, SIGMA, TAU};
-    use crate::glicko2::rating::{one_on_one, Rating, Status};
+    use crate::glicko2::{
+        algorithm,
+        constants::{EPSILON, MU, PHI, RATIO, SIGMA, TAU},
+        one_on_one,
+        rating::{Rating, Status},
+    };
 
     #[test]
     fn win() {
