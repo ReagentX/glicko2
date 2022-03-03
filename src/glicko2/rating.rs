@@ -1,3 +1,5 @@
+//! Data structures and convienience methods for creating and interacting with rating data
+
 use crate::glicko2::constants;
 
 /// Represents a team's Glicko2 rating (mu), distribution (phi), and volatility (sigma).

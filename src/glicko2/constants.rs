@@ -1,3 +1,5 @@
+//! Constants required by the Glicko2 Algorithm
+
 use std::f64::consts::LN_10;
 
 /// Default rating
