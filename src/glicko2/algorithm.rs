@@ -1,6 +1,6 @@
 //! The math behind the Glicko2 algorithm
 
-use crate::glicko2::constants::{EPSILON, Q, TAU};
+use crate::glicko2::constants::{EPSILON, TAU};
 use crate::glicko2::rating::match_result::val;
 use crate::glicko2::rating::match_result::Status;
 use crate::glicko2::rating::Rating;
@@ -138,7 +138,6 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
     // Step 4. Compute the quantity difference, the estimated improvement in
     //         rating by comparing the pre-period rating to the performance
     //         rating based only on game outcomes.
-    let mut d_square_inv = 0.0;
     let mut variance_inv = 0.0;
     let mut difference = 0.0;
 
@@ -149,15 +148,11 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
         let expected_inv = expected * (1.0 - expected);
         variance_inv += impact.powi(2) * expected_inv;
         difference += impact * (val(&score) - expected);
-        d_square_inv += expected_inv * (Q.powi(2) * impact.powi(2));
         other_rating.scale_up();
     }
 
     difference /= variance_inv.max(0.0001);
     let variance = 1.0 / variance_inv;
-    let denom = rating.phi.powi(-2) + d_square_inv;
-    // let mut mu = rating.mu + Q / denom * (difference / variance_inv);
-    let mut phi = (1.0 / denom).sqrt();
 
     // Step 5. Determine the new value, Sigma', or the sigma. This
     //         computation requires iteration.
@@ -165,10 +160,10 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
 
     // Step 6. Update the rating deviation to the new pre-rating period
     //         value, Phi*.
-    let phi_star = (phi.powi(2) + sigma.powi(2)).sqrt();
+    let phi_star = (rating.phi.powi(2) + sigma.powi(2)).sqrt();
 
     // Step 7. Update the rating and rating deviation to the new values, Mu' and Phi'.
-    phi = 1.0 / ((1.0 / phi_star).powi(2) + (1.0 / variance)).sqrt();
+    let phi = 1.0 / ((1.0 / phi_star).powi(2) + (1.0 / variance)).sqrt();
     let mu = (rating.mu + phi).powi(2) * (difference / variance);
 
     // Step 8. Convert rating and rating deviation back to original scale.

@@ -8,7 +8,7 @@ pub use crate::glicko2::{algorithm, constants, rating};
 #[cfg(test)]
 mod tests {
     use crate::glicko2::algorithm;
-    use crate::glicko2::constants::{EPSILON, MU, PHI, Q, RATIO, SIGMA, TAU};
+    use crate::glicko2::constants::{EPSILON, MU, PHI, RATIO, SIGMA, TAU};
     use crate::glicko2::rating::{match_result, one_on_one, Rating};
 
     #[test]
@@ -42,7 +42,6 @@ mod tests {
         assert_eq!(SIGMA, 0.006);
         assert_eq!(TAU, 1.3);
         assert_eq!(EPSILON, 0.0000001);
-        assert_eq!(Q, 0.005756462732485115);
         assert_eq!(RATIO, 173.7178);
     }
 
@@ -145,8 +144,8 @@ mod tests {
             vec![(match_result::Status::Win, &mut other_rating)],
         );
         println!("{:?}", new_rating);
-        assert_eq!(new_rating.mu, 1643.2406803139988);
-        assert_eq!(new_rating.phi, 297.7383025722689);
+        assert_eq!(new_rating.mu, 1643.2419919603035);
+        assert_eq!(new_rating.phi, 297.73966575502345);
         assert_eq!(new_rating.sigma, 0.005999997552929708);
         assert!(!new_rating.is_scaled);
     }
@@ -162,15 +161,15 @@ mod tests {
         };
         let (new_rating, other_rating) = one_on_one::rate(new_rating, other_rating, false);
         println!("New: {:?}", new_rating);
-        assert_eq!(new_rating.mu, 1643.2406803139988);
-        assert_eq!(new_rating.phi, 297.7383025722689);
+        assert_eq!(new_rating.mu, 1643.2419919603035);
+        assert_eq!(new_rating.phi, 297.73966575502345);
         assert_eq!(new_rating.sigma, 0.005999997552929708);
         assert!(!new_rating.is_scaled);
 
         println!("Other: {:?}", other_rating);
-        assert_eq!(other_rating.mu, 1476.3887184474581);
-        assert_eq!(other_rating.phi, 188.4371651087283);
-        assert_eq!(other_rating.sigma, 0.005899995780089439);
+        assert_eq!(other_rating.mu, 1476.3886820234704);
+        assert_eq!(other_rating.phi, 188.4375670743142);
+        assert_eq!(other_rating.sigma, 0.0058999957800978135);
         assert!(!other_rating.is_scaled);
     }
 
@@ -185,15 +184,15 @@ mod tests {
         };
         let (new_rating, other_rating) = one_on_one::rate(new_rating, other_rating, true);
         println!("New: {:?}", new_rating);
-        assert_eq!(new_rating.mu, 1486.1105693882885);
-        assert_eq!(new_rating.phi, 297.7383025710809);
+        assert_eq!(new_rating.mu, 1486.1104422036067);
+        assert_eq!(new_rating.phi, 297.73966575383554);
         assert_eq!(new_rating.sigma, 0.0059999938227804145);
         assert!(!new_rating.is_scaled);
 
         println!("Other: {:?}", other_rating);
-        assert_eq!(other_rating.mu, 1502.4424933614428);
-        assert_eq!(other_rating.phi, 187.0189343872027);
-        assert_eq!(other_rating.sigma, 0.005899991810542997);
+        assert_eq!(other_rating.mu, 1502.4424914475542);
+        assert_eq!(other_rating.phi, 187.01936485359374);
+        assert_eq!(other_rating.sigma, 0.005899991810567799);
         assert!(!other_rating.is_scaled);
     }
 
@@ -209,7 +208,7 @@ mod tests {
         // Get odds (percent chance team_1 beats team_2)
         let odds = one_on_one::odds(rating_1, rating_2);
         println!("{:?}", odds);
-        assert_eq!(odds, 0.7086337899806349);
+        assert_eq!(odds, 0.7086345168430092);
     }
 
     #[test]

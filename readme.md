@@ -18,7 +18,7 @@ let (rating_1, rating_2) = one_on_one::rate(rating_1, rating_2, false);
 
 /// Get odds (percent chance team_1 beats team_2)
 let odds = one_on_one::odds(rating_1, rating_2);
-println!("{}", odds); /// 0.7086337899806349
+println!("{}", odds); // 0.7086345168430092
 ```
 
 To update a series of matchups:
@@ -42,7 +42,7 @@ algorithm::rate(
 );
 
 /// Print our updated rating
-println!("{:?}", team_to_update); /// { mu: 1500.0, phi: 255.40, sigma: 0.0059, is_scaled: false }
+println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, is_scaled: false }
 ```
 
 ## Rating
