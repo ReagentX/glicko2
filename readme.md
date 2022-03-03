@@ -4,24 +4,9 @@ Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games. T
 
 ## Sample Usage
 
-To update a single matchup:
+The most common usage is to update a series of matches for each team, but this library provides many other convenience methods.
 
-```rust
-use glicko2::rating::{Rating, one_on_one};
-
-/// Create a Rating stuct for each team
-let rating_1 = Rating::new();
-let rating_2 = Rating::new();
-
-/// Update ratings for team_1 beating team_2
-let (rating_1, rating_2) = one_on_one::rate(rating_1, rating_2, false);
-
-/// Get odds (percent chance team_1 beats team_2)
-let odds = one_on_one::odds(rating_1, rating_2);
-println!("{}", odds); // 0.7086345168430092
-```
-
-To update a series of matchups:
+### To update a series of matchups
 
 ```rust
 use glicko2::{rating::{Rating, match_result}, algorithm};
@@ -43,6 +28,51 @@ algorithm::rate(
 
 /// Print our updated rating
 println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, is_scaled: false }
+```
+
+### To update both team's ratings for a single matchup
+
+```rust
+use glicko2::rating::{Rating, one_on_one};
+
+/// Create a Rating stuct for each team
+let rating_1 = Rating::new();
+let rating_2 = Rating::new();
+
+/// Update ratings for team_1 beating team_2
+let (rating_1, rating_2) = one_on_one::rate(rating_1, rating_2, false);
+
+/// Print our updated ratings
+println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059, is_scaled: false }
+println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_scaled: false }
+```
+
+### To get the odds one team will beat another
+
+```rust
+use glicko2::rating::{Rating, one_on_one};
+
+/// Create a Rating stuct for each team
+let rating_1 = Rating::new();
+let rating_2 = Rating::new();
+
+/// Get odds (percent chance team_1 beats team_2)
+let odds = one_on_one::odds(rating_1, rating_2);
+println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
+```
+
+### To determine the quality of a matchup
+
+```rust
+use glicko2::rating::{Rating, one_on_one};
+
+/// Create a Rating stuct for each team
+let rating_1 = Rating::new();
+let rating_2 = Rating::new();
+
+/// Get odds (percent chance team_1 beats team_2)
+let quality = one_on_one::quality(rating_1, rating_2);
+println!("{}", quality); // 1.0, perfect matchup since both teams have the same rating
 ```
 
 ## Rating
