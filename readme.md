@@ -11,7 +11,7 @@ The most common usage is to update a series of matches for each team, but this l
 ```rust
 use glicko2::{rating::{Rating, match_result::Status}, algorithm};
 
-/// Create a Rating stuct for each team
+/// Create a Rating struct for each team
 let mut team_to_update = Rating::new();
 let mut opponent_1 = Rating::new();
 let mut opponent_2 = Rating::new();
@@ -35,7 +35,7 @@ println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, i
 ```rust
 use glicko2::rating::{Rating, one_on_one};
 
-/// Create a Rating stuct for each team
+/// Create a Rating struct for each team
 let rating_1 = Rating::new();
 let rating_2 = Rating::new();
 
@@ -52,7 +52,7 @@ println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_sca
 ```rust
 use glicko2::rating::{Rating, one_on_one};
 
-/// Create a Rating stuct for each team
+/// Create a Rating struct for each team
 let rating_1 = Rating::new();
 let rating_2 = Rating::new();
 
@@ -66,7 +66,7 @@ println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
 ```rust
 use glicko2::rating::{Rating, one_on_one};
 
-/// Create a Rating stuct for each team
+/// Create a Rating struct for each team
 let rating_1 = Rating::new();
 let rating_2 = Rating::new();
 
