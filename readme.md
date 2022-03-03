@@ -30,23 +30,6 @@ algorithm::rate(
 println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, is_scaled: false }
 ```
 
-### To update both team's ratings for a single matchup
-
-```rust
-use glicko2::{rating::Rating, game};
-
-/// Create a Rating struct for each team
-let rating_1 = Rating::new();
-let rating_2 = Rating::new();
-
-/// Update ratings for team_1 beating team_2
-let (rating_1, rating_2) = game::compete(rating_1, rating_2, false);
-
-/// Print our updated ratings
-println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059, is_scaled: false }
-println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_scaled: false }
-```
-
 ### To get the odds one team will beat another
 
 ```rust
@@ -74,6 +57,24 @@ let rating_2 = Rating::new();
 let quality = game::quality(rating_1, rating_2);
 println!("{}", quality); // 1.0, perfect matchup since both teams have the same rating
 ```
+
+### To update both team's ratings for a single matchup
+
+```rust
+use glicko2::{rating::Rating, game};
+
+/// Create a Rating struct for each team
+let rating_1 = Rating::new();
+let rating_2 = Rating::new();
+
+/// Update ratings for team_1 beating team_2
+let (rating_1, rating_2) = game::compete(rating_1, rating_2, false);
+
+/// Print our updated ratings
+println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059, is_scaled: false }
+println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_scaled: false }
+```
+
 
 ## Rating
 
