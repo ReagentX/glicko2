@@ -107,7 +107,7 @@ Since time is a factor in rating deviation, the algorithm assumes all matches wi
 
 ## Problems
 
-- Difficult to determine the impact an individual match has
+- Difficult to determine the impact of an individual match
 - No ratings available in the middle of a rating period
 - Ratings are only valid at compute time
 
