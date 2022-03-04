@@ -1,4 +1,4 @@
-/**
+/*!
 Tuning parameters used for rating and algorithm calculations
 */
 
