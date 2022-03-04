@@ -32,14 +32,7 @@ impl Rating {
     }
 
     /// Scales a rating down to the Glicko2 scale
-    /// # Example
-    /// ```
-    /// use glicko2::Rating;
-    ///
-    /// let mut new_rating = Rating::new();
-    /// new_rating.scale_down();
-    /// ```
-    pub fn scale_down(&mut self) {
+    pub(crate) fn scale_down(&mut self) {
         if !self.is_scaled {
             let mu = (self.mu - constants::MU) / constants::RATIO;
             let phi = self.phi / constants::RATIO;
@@ -49,15 +42,8 @@ impl Rating {
         }
     }
 
-    /// Scales a rating down to the nominal scale
-    /// # Example
-    /// ```
-    /// use glicko2::Rating;
-    ///
-    /// let mut new_rating = Rating::new();
-    /// new_rating.scale_up();
-    /// ```
-    pub fn scale_up(&mut self) {
+    /// Scales a rating up to the nominal scale
+    pub(crate) fn scale_up(&mut self) {
         if self.is_scaled {
             let mu = (self.mu * constants::RATIO) + constants::MU;
             let phi = self.phi * constants::RATIO;

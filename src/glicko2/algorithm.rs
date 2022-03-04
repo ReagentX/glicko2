@@ -8,21 +8,7 @@ use crate::glicko2::{
 };
 
 /// This function reduces the impact of games as a function of an opponent's rating deviation.
-///
-/// # Example
-///
-/// ```
-/// use glicko2::{Rating, algorithm};
-///
-/// let mut team_1 = Rating::new();
-/// let mut team_2 = Rating::new();
-///
-/// team_1.scale_down();
-/// team_2.scale_down();
-///
-/// let impact = algorithm::reduce_impact(&team_1, &team_2);
-/// ```
-pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
+pub(crate) fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
     // Must be called for scaled ratings
     if !rating.is_scaled || !other_rating.is_scaled {
         panic!("Unscaled ratings passed to reduce impact!");
@@ -35,24 +21,7 @@ pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
 }
 
 /// The expected outcome of a game given two sets of ratings.
-///
-/// # Example
-///
-/// ```
-/// use glicko2::{Rating, algorithm};
-///
-/// let mut team_1 = Rating::new();
-/// let mut team_2 = Rating::new();
-/// team_1.scale_down();
-/// team_2.scale_down();
-///
-/// let expected_score = algorithm::expect_score(
-///     &team_1,
-///     &team_2,
-///     algorithm::reduce_impact(&team_1, &team_2),
-/// );
-/// ```
-pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 {
+pub(crate) fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 {
     if !rating.is_scaled || !other_rating.is_scaled {
         panic!("Unscaled ratings passed to expect score!");
     }
