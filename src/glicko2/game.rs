@@ -3,7 +3,7 @@ Provides functions to handle a single one on one game and update ratings accordi
 */
 use crate::glicko2::{algorithm, constants, rating::Rating};
 
-/// Updates ratings for two teams
+/// Updates ratings for two teams.
 /// If the game was a draw, pass `drawn` as `true`.
 ///
 /// # Example
@@ -29,7 +29,7 @@ pub fn compete(winner: &mut Rating, loser: &mut Rating, drawn: bool) {
     };
 }
 
-/// Determines the odds the first team will beat the second team
+/// Determines the odds the first team will beat the second team.
 ///
 /// # Example
 ///

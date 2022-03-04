@@ -15,7 +15,7 @@ pub struct Rating<'a> {
 }
 
 impl<'a> Rating<'a> {
-    /// Create a new instance of a Rating with default constants.
+    /// Create a new instance of a Rating based on the provided tuning parameters.
     ///
     /// # Example
     /// ```
@@ -56,7 +56,7 @@ impl<'a> Rating<'a> {
         }
     }
 
-    /// Decay a rating for a team that has not played during a period
+    /// Decay a rating for a team that has not played during a period.
     /// # Example
     /// ```
     /// use glicko2::{Rating, Tuning};
