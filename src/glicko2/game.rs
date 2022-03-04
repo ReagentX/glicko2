@@ -9,10 +9,12 @@ use crate::glicko2::{algorithm, constants, rating::Rating};
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, game};
+/// use glicko2::{Rating, Tuning, game};
 ///
-/// let mut rating_1 = Rating::new();
-/// let mut rating_2 = Rating::new();
+/// let tuning = Tuning::default();
+///
+/// let mut rating_1 = Rating::new(&tuning);
+/// let mut rating_2 = Rating::new(&tuning);
 ///
 /// game::compete(&mut rating_1, &mut rating_2, false);
 /// ```
@@ -32,10 +34,12 @@ pub fn compete(winner: &mut Rating, loser: &mut Rating, drawn: bool) {
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, game};
+/// use glicko2::{Rating, Tuning, game};
 ///
-/// let mut rating_1 = Rating::new();
-/// let mut rating_2 = Rating::new();
+/// let tuning = Tuning::default();
+///
+/// let mut rating_1 = Rating::new(&tuning);
+/// let mut rating_2 = Rating::new(&tuning);
 ///
 /// let odds = game::odds(&mut rating_1, &mut rating_2);
 /// ```
@@ -54,10 +58,12 @@ pub fn odds(rating1: &mut Rating, rating2: &mut Rating) -> f64 {
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, game};
+/// use glicko2::{Rating, Tuning, game};
 ///
-/// let mut rating_1 = Rating::new();
-/// let mut rating_2 = Rating::new();
+/// let tuning = Tuning::default();
+///
+/// let mut rating_1 = Rating::new(&tuning);
+/// let mut rating_2 = Rating::new(&tuning);
 ///
 /// let quality = game::quality(&mut rating_1, &mut rating_2);
 /// ```
@@ -71,6 +77,7 @@ pub fn quality(rating1: &mut Rating, rating2: &mut Rating) -> f64 {
 
 /// Enum representing the Glicko2 values for match outcomes
 #[derive(Debug)]
+// TODO: Rename to "Outcome"
 pub enum Status {
     Win,
     Draw,
