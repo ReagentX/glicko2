@@ -9,7 +9,7 @@ use crate::glicko2::{algorithm, constants, rating::Rating};
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, Tuning, game};
+/// use glicko_2::{Rating, Tuning, game};
 ///
 /// let tuning = Tuning::default();
 ///
@@ -34,7 +34,7 @@ pub fn compete(winner: &mut Rating, loser: &mut Rating, drawn: bool) {
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, Tuning, game};
+/// use glicko_2::{Rating, Tuning, game};
 ///
 /// let tuning = Tuning::default();
 ///
@@ -58,7 +58,7 @@ pub fn odds(rating1: &mut Rating, rating2: &mut Rating) -> f64 {
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, Tuning, game};
+/// use glicko_2::{Rating, Tuning, game};
 ///
 /// let tuning = Tuning::default();
 ///
@@ -89,7 +89,7 @@ impl Outcome {
     /// # Example
     ///
     /// ```
-    /// use glicko2::game::Outcome;
+    /// use glicko_2::game::Outcome;
     ///
     /// let loss = Outcome::Loss;
     /// let loss_val = loss.val();

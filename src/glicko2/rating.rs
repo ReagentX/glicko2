@@ -19,7 +19,7 @@ impl<'a> Rating<'a> {
     ///
     /// # Example
     /// ```
-    /// use glicko2::{Rating, Tuning};
+    /// use glicko_2::{Rating, Tuning};
     ///
     /// let tuning = Tuning::default();
     /// let team_1 = Rating::new(&tuning);
@@ -59,7 +59,7 @@ impl<'a> Rating<'a> {
     /// Decay a rating for a team that has not played during a period.
     /// # Example
     /// ```
-    /// use glicko2::{Rating, Tuning};
+    /// use glicko_2::{Rating, Tuning};
     /// 
     /// let tuning = Tuning::default();
     /// let mut new_rating = Rating::new(&tuning);
