@@ -1,20 +1,14 @@
-use crate::glicko2::constants::{EPSILON, Q, TAU};
-use crate::glicko2::rating::match_result::val;
-use crate::glicko2::rating::match_result::Status;
-use crate::glicko2::rating::Rating;
+/*!
+The math behind the Glicko2 algorithm
+*/
+use crate::glicko2::{
+    constants::{EPSILON, TAU},
+    game::Status,
+    rating::Rating,
+};
 
 /// This function reduces the impact of games as a function of an opponent's rating deviation.
-///
-/// # Example
-///
-/// ```
-/// let mut team_1 = glicko2::rating::Rating::new();
-/// let mut team_2 = glicko2::rating::Rating::new();
-/// team_1.scale_down();
-/// team_2.scale_down();
-/// let impact = glicko2::algorithm::reduce_impact(&team_1, &team_2);
-/// ```
-pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
+pub(crate) fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
     // Must be called for scaled ratings
     if !rating.is_scaled || !other_rating.is_scaled {
         panic!("Unscaled ratings passed to reduce impact!");
@@ -27,21 +21,7 @@ pub fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
 }
 
 /// The expected outcome of a game given two sets of ratings.
-///
-/// # Example
-///
-/// ```
-/// let mut team_1 = glicko2::rating::Rating::new();
-/// let mut team_2 = glicko2::rating::Rating::new();
-/// team_1.scale_down();
-/// team_2.scale_down();
-/// let expected_score = glicko2::algorithm::expect_score(
-///     &team_1,
-///     &team_2,
-///     glicko2::algorithm::reduce_impact(&team_1, &team_2),
-/// );
-/// ```
-pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 {
+pub(crate) fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 {
     if !rating.is_scaled || !other_rating.is_scaled {
         panic!("Unscaled ratings passed to expect score!");
     }
@@ -50,7 +30,7 @@ pub fn expect_score(rating: &Rating, other_rating: &Rating, impact: f64) -> f64 
 }
 
 /// Determine the new value for volatility given a set of ratings.
-pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
+fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
     let phi = rating.phi;
     let diff_squared = difference.powi(2);
     // 1. Let a = ln(sigma^2)
@@ -111,15 +91,18 @@ pub fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64
 /// # Example
 ///
 /// ```
-/// let mut team_to_update = glicko2::rating::Rating::new();
-/// let mut opponent_1 = glicko2::rating::Rating::new();
-/// let mut opponent_2 = glicko2::rating::Rating::new();
-/// let mut opponent_3 = glicko2::rating::Rating::new();
+/// use glicko2::{Rating, game::Status};
+///
+/// let mut team_to_update = Rating::new();
+/// let mut opponent_1 = Rating::new();
+/// let mut opponent_2 = Rating::new();
+/// let mut opponent_3 = Rating::new();
+///
 /// glicko2::algorithm::rate(
 ///     &mut team_to_update,
-///     vec![(glicko2::rating::match_result::Status::Win, &mut opponent_1),
-///          (glicko2::rating::match_result::Status::Loss, &mut opponent_2),
-///          (glicko2::rating::match_result::Status::Draw, &mut opponent_3),
+///     vec![(Status::Win, &mut opponent_1),
+///          (Status::Loss, &mut opponent_2),
+///          (Status::Draw, &mut opponent_3),
 ///      ]
 /// );
 /// ```
@@ -136,7 +119,6 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
     // Step 4. Compute the quantity difference, the estimated improvement in
     //         rating by comparing the pre-period rating to the performance
     //         rating based only on game outcomes.
-    let mut d_square_inv = 0.0;
     let mut variance_inv = 0.0;
     let mut difference = 0.0;
 
@@ -146,16 +128,12 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
         let expected = expect_score(rating, other_rating, impact);
         let expected_inv = expected * (1.0 - expected);
         variance_inv += impact.powi(2) * expected_inv;
-        difference += impact * (val(&score) - expected);
-        d_square_inv += expected_inv * (Q.powi(2) * impact.powi(2));
+        difference += impact * (score.val() - expected);
         other_rating.scale_up();
     }
 
     difference /= variance_inv.max(0.0001);
     let variance = 1.0 / variance_inv;
-    let denom = rating.phi.powi(-2) + d_square_inv;
-    // let mut mu = rating.mu + Q / denom * (difference / variance_inv);
-    let mut phi = (1.0 / denom).sqrt();
 
     // Step 5. Determine the new value, Sigma', or the sigma. This
     //         computation requires iteration.
@@ -163,10 +141,10 @@ pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
 
     // Step 6. Update the rating deviation to the new pre-rating period
     //         value, Phi*.
-    let phi_star = (phi.powi(2) + sigma.powi(2)).sqrt();
+    let phi_star = (rating.phi.powi(2) + sigma.powi(2)).sqrt();
 
     // Step 7. Update the rating and rating deviation to the new values, Mu' and Phi'.
-    phi = 1.0 / ((1.0 / phi_star).powi(2) + (1.0 / variance)).sqrt();
+    let phi = 1.0 / ((1.0 / phi_star).powi(2) + (1.0 / variance)).sqrt();
     let mu = (rating.mu + phi).powi(2) * (difference / variance);
 
     // Step 8. Convert rating and rating deviation back to original scale.

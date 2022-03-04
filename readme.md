@@ -1,22 +1,82 @@
 # Glicko2 (Rust Edition)
 
-Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games.
+Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games. This is a zero-dependency Rust library implementing this algorithm.
 
 ## Sample Usage
 
+The most common usage is to update a series of matches for each team, but this library provides many other convenience methods.
+
+### To update a series of matchups
+
 ```rust
-use crate::glicko2::rating;
+use glicko2::{Rating, game::Status, algorithm};
 
-// Create a rating object for each team
-let rating_1 = rating::make_rating();
-let rating_2 = rating::make_rating();
+/// Create a Rating struct for each team
+let mut team_to_update = Rating::new();
+let mut opponent_1 = Rating::new();
+let mut opponent_2 = Rating::new();
+let mut opponent_3 = Rating::new();
+let mut opponent_4 = Rating::new();
 
-// Update ratings for team_1 beating team_2
-let (rating_1, rating_2) = rating::one_on_one::rate(rating_1, rating_2, false);
+/// Rate our team against a vector of matchup results
+algorithm::rate(
+    &mut team_to_update,
+    vec![(Status::Win, &mut opponent_1),
+         (Status::Loss, &mut opponent_2),
+         (Status::Draw, &mut opponent_3),
+    ]
+);
 
-// Get odds (percent chance team_1 beats team_2)
-let odds = rating::one_on_one::odds(rating_1, rating_2);
-println!("{:?}", odds); // 0.7086337899806349
+/// Opponent 4 did not play, so their rating must be decayed
+opponent_4.decay();
+
+/// Print our updated rating
+println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, is_scaled: false }
+```
+
+### To get the odds one team will beat another
+
+```rust
+use glicko2::{Rating, game};
+
+/// Create a Rating struct for each team
+let mut rating_1 = Rating::new();
+let mut rating_2 = Rating::new();
+
+/// Get odds (percent chance team_1 beats team_2)
+let odds = game::odds(&mut rating_1, &mut rating_2);
+println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
+```
+
+### To determine the quality of a matchup
+
+```rust
+use glicko2::{Rating, game};
+
+/// Create a Rating struct for each team
+let mut rating_1 = Rating::new();
+let mut rating_2 = Rating::new();
+
+/// Get odds (the advantage team 1 has over team 2)
+let quality = game::quality(&mut rating_1, &mut rating_2);
+println!("{}", quality); // 1.0, perfect matchup since both teams have the same rating
+```
+
+### To update both team's ratings for a single matchup
+
+```rust
+use glicko2::{Rating, game};
+
+/// Create a Rating struct for each team
+let mut rating_1 = Rating::new();
+let mut rating_2 = Rating::new();
+
+/// Update ratings for team_1 beating team_2
+game::compete(&mut rating_1, &mut rating_2, false);
+
+/// Print our updated ratings
+println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059, is_scaled: false }
+println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_scaled: false }
 ```
 
 ## Rating
@@ -46,7 +106,7 @@ Since time is a factor in rating deviation, the algorithm assumes all matches wi
 
 ## Problems
 
-- Difficult to determine the impact an individual match has
+- Difficult to determine the impact of an individual match
 - No ratings available in the middle of a rating period
 - Ratings are only valid at compute time
 
