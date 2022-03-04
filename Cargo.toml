@@ -1,8 +1,14 @@
 [package]
-name = "glicko2"
+name = "glicko_2"
 version = "0.0.0"
-authors = ["Christopher Sardegna <gpg@reagentx.net>"]
+authors = ["Christopher Sardegna <glicko2@reagentx.net>"]
 edition = "2021"
+description = "Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games."
+readme = "readme.md"
+repository = "https://github.com/ReagentX/glicko2"
+license-file = "LICENSE"
+keywords = ["rating", "gamedev", "glicko", "trueskill", "elo"]
+categories = ["algorithms", "game-development", "mathematics"]
 
 [profile.release]
 # Remove symbols from release
