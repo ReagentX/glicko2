@@ -5,3 +5,4 @@ pub mod algorithm;
 pub mod constants;
 pub mod game;
 pub mod rating;
+pub mod tuning;
