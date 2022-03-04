@@ -4,6 +4,12 @@ Tuning parameters used for rating and algorithm calculations
 
 use crate::constants;
 
+/// Container for algorithm tuning parameters. More details available in the readme.
+/// 
+/// - `mu`: Mean rating
+/// - `phi`: Default confidence interval size
+/// - `sigma`: Default Performance volatility
+/// - `tau`: Default change constraint
 #[derive(Debug)]
 pub struct Tuning {
     pub mu: f64,
