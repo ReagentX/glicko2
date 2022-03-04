@@ -9,21 +9,24 @@ The most common usage is to update a series of matches for each team, but this l
 ### To update a series of matchups
 
 ```rust
-use glicko2::{Rating, game::Status, algorithm};
+use glicko2::{Rating, Tuning, game::Outcome, algorithm};
+
+/// Tune the rating values, here we use the default
+let tuning = Tuning::default();
 
 /// Create a Rating struct for each team
-let mut team_to_update = Rating::new();
-let mut opponent_1 = Rating::new();
-let mut opponent_2 = Rating::new();
-let mut opponent_3 = Rating::new();
-let mut opponent_4 = Rating::new();
+let mut team_to_update = Rating::new(&tuning);
+let mut opponent_1 = Rating::new(&tuning);
+let mut opponent_2 = Rating::new(&tuning);
+let mut opponent_3 = Rating::new(&tuning);
+let mut opponent_4 = Rating::new(&tuning);
 
 /// Rate our team against a vector of matchup results
 algorithm::rate(
     &mut team_to_update,
-    vec![(Status::Win, &mut opponent_1),
-         (Status::Loss, &mut opponent_2),
-         (Status::Draw, &mut opponent_3),
+    vec![(Outcome::Win, &mut opponent_1),
+         (Outcome::Loss, &mut opponent_2),
+         (Outcome::Draw, &mut opponent_3),
     ]
 );
 
@@ -37,11 +40,14 @@ println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, i
 ### To get the odds one team will beat another
 
 ```rust
-use glicko2::{Rating, game};
+use glicko2::{Rating, Tuning, game};
+
+/// Tune the rating values, here we use the default
+let tuning = Tuning::default();
 
 /// Create a Rating struct for each team
-let mut rating_1 = Rating::new();
-let mut rating_2 = Rating::new();
+let mut rating_1 = Rating::new(&tuning);
+let mut rating_2 = Rating::new(&tuning);
 
 /// Get odds (percent chance team_1 beats team_2)
 let odds = game::odds(&mut rating_1, &mut rating_2);
@@ -51,11 +57,14 @@ println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
 ### To determine the quality of a matchup
 
 ```rust
-use glicko2::{Rating, game};
+use glicko2::{Rating, Tuning, game};
+
+/// Tune the rating values, here we use the defaults
+let tuning = Tuning::default();
 
 /// Create a Rating struct for each team
-let mut rating_1 = Rating::new();
-let mut rating_2 = Rating::new();
+let mut rating_1 = Rating::new(&tuning);
+let mut rating_2 = Rating::new(&tuning);
 
 /// Get odds (the advantage team 1 has over team 2)
 let quality = game::quality(&mut rating_1, &mut rating_2);
@@ -65,11 +74,14 @@ println!("{}", quality); // 1.0, perfect matchup since both teams have the same 
 ### To update both team's ratings for a single matchup
 
 ```rust
-use glicko2::{Rating, game};
+use glicko2::{Rating, Tuning, game};
+
+/// Tune the rating values, here we use the defaults
+let tuning = Tuning::default();
 
 /// Create a Rating struct for each team
-let mut rating_1 = Rating::new();
-let mut rating_2 = Rating::new();
+let mut rating_1 = Rating::new(&tuning);
+let mut rating_2 = Rating::new(&tuning);
 
 /// Update ratings for team_1 beating team_2
 game::compete(&mut rating_1, &mut rating_2, false);

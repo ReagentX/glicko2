@@ -1,11 +1,7 @@
 /*!
 The math behind the Glicko2 algorithm
 */
-use crate::glicko2::{
-    constants::{EPSILON, TAU},
-    game::Status,
-    rating::Rating,
-};
+use crate::glicko2::{constants::EPSILON, game::Outcome, rating::Rating};
 
 /// This function reduces the impact of games as a function of an opponent's rating deviation.
 pub(crate) fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
@@ -41,7 +37,7 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
         let tmp = phi.powi(2) + variance + x.exp();
         let tmp_2 = 2.0 * tmp.powi(2);
         let a = x.exp() * (diff_squared - tmp) / tmp_2;
-        let b = (x - alpha) / TAU.powi(2);
+        let b = (x - alpha) / rating.tuning.tau.powi(2);
         a - b
     };
 
@@ -51,10 +47,10 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
         (diff_squared - phi.powi(2) - variance).ln()
     } else {
         let mut k = 1.0;
-        while optimality_criterion(alpha - k * TAU) < 0.0 {
+        while optimality_criterion(alpha - k * rating.tuning.tau) < 0.0 {
             k += 1.0;
         }
-        alpha - k * TAU
+        alpha - k * rating.tuning.tau
     };
 
     // 3. Let fA = optimality_criterion(A) and f(B) = optimality_criterion(B)
@@ -91,22 +87,24 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, game::Status};
+/// use glicko2::{Rating, Tuning, game::Outcome};
 ///
-/// let mut team_to_update = Rating::new();
-/// let mut opponent_1 = Rating::new();
-/// let mut opponent_2 = Rating::new();
-/// let mut opponent_3 = Rating::new();
+/// let tuning = Tuning::default();
+/// 
+/// let mut team_to_update = Rating::new(&tuning);
+/// let mut opponent_1 = Rating::new(&tuning);
+/// let mut opponent_2 = Rating::new(&tuning);
+/// let mut opponent_3 = Rating::new(&tuning);
 ///
 /// glicko2::algorithm::rate(
 ///     &mut team_to_update,
-///     vec![(Status::Win, &mut opponent_1),
-///          (Status::Loss, &mut opponent_2),
-///          (Status::Draw, &mut opponent_3),
+///     vec![(Outcome::Win, &mut opponent_1),
+///          (Outcome::Loss, &mut opponent_2),
+///          (Outcome::Draw, &mut opponent_3),
 ///      ]
 /// );
 /// ```
-pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
+pub fn rate(rating: &mut Rating, outcomes: Vec<(Outcome, &mut Rating)>) {
     // Outcome is a list of outcomes for a set of games between two teams, i.e.
     //   a vector tuples like [(WIN, rating2), ...]
 
