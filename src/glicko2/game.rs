@@ -21,11 +21,11 @@ use crate::glicko2::{algorithm, constants, rating::Rating};
 pub fn compete(winner: &mut Rating, loser: &mut Rating, drawn: bool) {
     // drawn is false if Team 1 beat Team 2
     if drawn {
-        algorithm::rate(winner, vec![(Status::Draw, loser)]);
-        algorithm::rate(loser, vec![(Status::Draw, winner)]);
+        algorithm::rate(winner, vec![(Outcome::Draw, loser)]);
+        algorithm::rate(loser, vec![(Outcome::Draw, winner)]);
     } else {
-        algorithm::rate(winner, vec![(Status::Win, loser)]);
-        algorithm::rate(loser, vec![(Status::Loss, winner)]);
+        algorithm::rate(winner, vec![(Outcome::Win, loser)]);
+        algorithm::rate(loser, vec![(Outcome::Loss, winner)]);
     };
 }
 
@@ -77,29 +77,28 @@ pub fn quality(rating1: &mut Rating, rating2: &mut Rating) -> f64 {
 
 /// Enum representing the Glicko2 values for match outcomes
 #[derive(Debug)]
-// TODO: Rename to "Outcome"
-pub enum Status {
+pub enum Outcome {
     Win,
     Draw,
     Loss,
 }
 
-impl Status {
+impl Outcome {
     /// Gets the constant float value associated with each outcome
     ///
     /// # Example
     ///
     /// ```
-    /// use glicko2::game::Status;
+    /// use glicko2::game::Outcome;
     ///
-    /// let loss = Status::Loss;
+    /// let loss = Outcome::Loss;
     /// let loss_val = loss.val();
     /// ```
     pub fn val(&self) -> f64 {
         match self {
-            Status::Win => constants::WIN,
-            Status::Draw => constants::DRAW,
-            Status::Loss => constants::LOSS,
+            Outcome::Win => constants::WIN,
+            Outcome::Draw => constants::DRAW,
+            Outcome::Loss => constants::LOSS,
         }
     }
 }

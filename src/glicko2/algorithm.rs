@@ -1,7 +1,7 @@
 /*!
 The math behind the Glicko2 algorithm
 */
-use crate::glicko2::{constants::EPSILON, game::Status, rating::Rating};
+use crate::glicko2::{constants::EPSILON, game::Outcome, rating::Rating};
 
 /// This function reduces the impact of games as a function of an opponent's rating deviation.
 pub(crate) fn reduce_impact(rating: &Rating, other_rating: &Rating) -> f64 {
@@ -87,7 +87,7 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, Tuning, game::Status};
+/// use glicko2::{Rating, Tuning, game::Outcome};
 ///
 /// let tuning = Tuning::default();
 /// 
@@ -98,13 +98,13 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
 ///
 /// glicko2::algorithm::rate(
 ///     &mut team_to_update,
-///     vec![(Status::Win, &mut opponent_1),
-///          (Status::Loss, &mut opponent_2),
-///          (Status::Draw, &mut opponent_3),
+///     vec![(Outcome::Win, &mut opponent_1),
+///          (Outcome::Loss, &mut opponent_2),
+///          (Outcome::Draw, &mut opponent_3),
 ///      ]
 /// );
 /// ```
-pub fn rate(rating: &mut Rating, outcomes: Vec<(Status, &mut Rating)>) {
+pub fn rate(rating: &mut Rating, outcomes: Vec<(Outcome, &mut Rating)>) {
     // Outcome is a list of outcomes for a set of games between two teams, i.e.
     //   a vector tuples like [(WIN, rating2), ...]
 

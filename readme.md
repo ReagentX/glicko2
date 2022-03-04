@@ -9,7 +9,7 @@ The most common usage is to update a series of matches for each team, but this l
 ### To update a series of matchups
 
 ```rust
-use glicko2::{Rating, Tuning, game::Status, algorithm};
+use glicko2::{Rating, Tuning, game::Outcome, algorithm};
 
 /// Tune the rating values, here we use the default
 let tuning = Tuning::default();
@@ -24,9 +24,9 @@ let mut opponent_4 = Rating::new(&tuning);
 /// Rate our team against a vector of matchup results
 algorithm::rate(
     &mut team_to_update,
-    vec![(Status::Win, &mut opponent_1),
-         (Status::Loss, &mut opponent_2),
-         (Status::Draw, &mut opponent_3),
+    vec![(Outcome::Win, &mut opponent_1),
+         (Outcome::Loss, &mut opponent_2),
+         (Outcome::Draw, &mut opponent_3),
     ]
 );
 

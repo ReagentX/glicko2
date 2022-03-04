@@ -23,7 +23,7 @@ mod game_tests {
 
     #[test]
     fn win() {
-        let win = game::Status::Win;
+        let win = game::Outcome::Win;
         let win_val = win.val();
         println!("{:?}\t{:?}", win, win_val);
         assert_eq!(win_val, 1.)
@@ -31,7 +31,7 @@ mod game_tests {
 
     #[test]
     fn draw() {
-        let draw = game::Status::Draw;
+        let draw = game::Outcome::Draw;
         let draw_val = draw.val();
         println!("{:?}\t{:?}", draw, draw_val);
         assert_eq!(draw_val, 0.5)
@@ -39,7 +39,7 @@ mod game_tests {
 
     #[test]
     fn loss() {
-        let loss = game::Status::Loss;
+        let loss = game::Outcome::Loss;
         let loss_val = loss.val();
         println!("{:?}\t{:?}", loss, loss_val);
         assert_eq!(loss_val, 0.0)
@@ -283,7 +283,7 @@ mod algorithm_tests {
         };
         algorithm::rate(
             &mut new_rating,
-            vec![(game::Status::Win, &mut other_rating)],
+            vec![(game::Outcome::Win, &mut other_rating)],
         );
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2419919603035);
