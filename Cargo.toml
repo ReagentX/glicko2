@@ -1,15 +1,11 @@
 [package]
 name = "glicko2"
-version = "0.1.0"
+version = "0.0.0"
 authors = ["Christopher Sardegna <gpg@reagentx.net>"]
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-
-[profile.dev]
-opt-level = 0
+edition = "2021"
 
 [profile.release]
-opt-level = 3
+# Remove symbols from release
+strip = true
+# Perform Link Time Optimization
+lto = true
