@@ -2,6 +2,15 @@
 
 Glicko2 is an iterative algorithm for ranking opponents or teams in 1v1 games. This is a zero-dependency Rust library implementing this algorithm.
 
+## Installation
+
+Add the following to your `Cargo.toml`:
+
+```toml
+[dependencies]
+glicko_2 = "1.0.0"
+```
+
 ## Sample Usage
 
 The most common usage is to update a series of matches for each team, but this library provides many other convenience methods.
