@@ -6,7 +6,7 @@ use crate::constants;
 
 /// Container for algorithm tuning parameters. More details available in the readme.
 /// 
-/// - `mu`: Mean rating
+/// - `mu`: Default mean rating
 /// - `phi`: Default confidence interval size
 /// - `sigma`: Default Performance volatility
 /// - `tau`: Default change constraint
