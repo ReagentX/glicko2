@@ -1,5 +1,5 @@
 [package]
-name = "glicko2"
+name = "glicko_2"
 version = "0.0.0"
 authors = ["Christopher Sardegna <glicko2@reagentx.net>"]
 edition = "2021"

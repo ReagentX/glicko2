@@ -26,7 +26,7 @@ impl Tuning {
     /// # Example
     /// 
     /// ```
-    /// use glicko2::Tuning;
+    /// use glicko_2::Tuning;
     /// 
     /// let default_tuning = Tuning::default();
     /// let custom_tuning = Tuning::new(1200.0, 200.0, 0.05, 0.6);

@@ -9,7 +9,7 @@ The most common usage is to update a series of matches for each team, but this l
 ### To update a series of matchups
 
 ```rust
-use glicko2::{Rating, Tuning, game::Outcome, algorithm};
+use glicko_2::{Rating, Tuning, game::Outcome, algorithm};
 
 /// Tune the rating values, here we use the default
 let tuning = Tuning::default();
@@ -40,7 +40,7 @@ println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, i
 ### To get the odds one team will beat another
 
 ```rust
-use glicko2::{Rating, Tuning, game};
+use glicko_2::{Rating, Tuning, game};
 
 /// Tune the rating values, here we use the default
 let tuning = Tuning::default();
@@ -57,7 +57,7 @@ println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
 ### To determine the quality of a matchup
 
 ```rust
-use glicko2::{Rating, Tuning, game};
+use glicko_2::{Rating, Tuning, game};
 
 /// Tune the rating values, here we use the defaults
 let tuning = Tuning::default();
@@ -74,7 +74,7 @@ println!("{}", quality); // 1.0, perfect matchup since both teams have the same 
 ### To update both team's ratings for a single matchup
 
 ```rust
-use glicko2::{Rating, Tuning, game};
+use glicko_2::{Rating, Tuning, game};
 
 /// Tune the rating values, here we use the defaults
 let tuning = Tuning::default();

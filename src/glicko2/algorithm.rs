@@ -87,7 +87,7 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
 /// # Example
 ///
 /// ```
-/// use glicko2::{Rating, Tuning, game::Outcome};
+/// use glicko_2::{Rating, Tuning, game::Outcome};
 ///
 /// let tuning = Tuning::default();
 /// 
@@ -96,7 +96,7 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
 /// let mut opponent_2 = Rating::new(&tuning);
 /// let mut opponent_3 = Rating::new(&tuning);
 ///
-/// glicko2::algorithm::rate(
+/// glicko_2::algorithm::rate(
 ///     &mut team_to_update,
 ///     vec![(Outcome::Win, &mut opponent_1),
 ///          (Outcome::Loss, &mut opponent_2),
