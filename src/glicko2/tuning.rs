@@ -5,7 +5,7 @@ Tuning parameters used for rating and algorithm calculations
 use crate::constants;
 
 /// Container for algorithm tuning parameters. More details available in the readme.
-/// 
+///
 /// - `mu`: Default mean rating
 /// - `phi`: Default confidence interval size
 /// - `sigma`: Default Performance volatility
@@ -19,15 +19,14 @@ pub struct Tuning {
 }
 
 impl Tuning {
-    #[allow(clippy::too_many_arguments)]
     /// Create custom tuning parameters for the Glicko2 algorithm.
     /// The default option uses the values provided by the paper.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```
     /// use glicko_2::Tuning;
-    /// 
+    ///
     /// let default_tuning = Tuning::default();
     /// let custom_tuning = Tuning::new(1200.0, 200.0, 0.05, 0.6);
     /// ```
