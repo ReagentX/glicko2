@@ -33,7 +33,7 @@ let mut opponent_4 = Rating::new(&tuning);
 /// Rate our team against a vector of matchup results
 algorithm::rate(
     &mut team_to_update,
-    vec![(Outcome::Win, &mut opponent_1),
+    &mut [(Outcome::Win, &mut opponent_1),
          (Outcome::Loss, &mut opponent_2),
          (Outcome::Draw, &mut opponent_3),
     ]
@@ -43,7 +43,7 @@ algorithm::rate(
 opponent_4.decay();
 
 /// Print our updated rating
-println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059, is_scaled: false }
+println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059 }
 ```
 
 ### To get the odds one team will beat another
@@ -96,8 +96,8 @@ let mut rating_2 = Rating::new(&tuning);
 game::compete(&mut rating_1, &mut rating_2, false);
 
 /// Print our updated ratings
-println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059, is_scaled: false }
-println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059, is_scaled: false }
+println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059 }
+println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059 }
 ```
 
 ## Rating

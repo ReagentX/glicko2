@@ -283,7 +283,7 @@ mod algorithm_tests {
         };
         algorithm::rate(
             &mut new_rating,
-            vec![(game::Outcome::Win, &mut other_rating)],
+            &mut [(game::Outcome::Win, &mut other_rating)],
         );
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2419919603035);

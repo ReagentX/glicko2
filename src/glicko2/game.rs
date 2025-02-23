@@ -21,11 +21,11 @@ use crate::glicko2::{algorithm, constants, rating::Rating};
 pub fn compete(winner: &mut Rating, loser: &mut Rating, drawn: bool) {
     // drawn is false if Team 1 beat Team 2
     if drawn {
-        algorithm::rate(winner, vec![(Outcome::Draw, loser)]);
-        algorithm::rate(loser, vec![(Outcome::Draw, winner)]);
+        algorithm::rate(winner, &mut [(Outcome::Draw, loser)]);
+        algorithm::rate(loser, &mut [(Outcome::Draw, winner)]);
     } else {
-        algorithm::rate(winner, vec![(Outcome::Win, loser)]);
-        algorithm::rate(loser, vec![(Outcome::Loss, winner)]);
+        algorithm::rate(winner, &mut [(Outcome::Win, loser)]);
+        algorithm::rate(loser, &mut [(Outcome::Loss, winner)]);
     };
 }
 
@@ -94,7 +94,7 @@ impl Outcome {
     /// let loss = Outcome::Loss;
     /// let loss_val = loss.val();
     /// ```
-    pub fn val(&self) -> f64 {
+    pub const fn val(&self) -> f64 {
         match self {
             Outcome::Win => constants::WIN,
             Outcome::Draw => constants::DRAW,
