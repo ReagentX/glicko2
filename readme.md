@@ -43,7 +43,7 @@ algorithm::rate(
 opponent_4.decay();
 
 /// Print our updated rating
-println!("{:?}", team_to_update); // { mu: 1500.0, phi: 255.40, sigma: 0.0059 }
+println!("{:?}", team_to_update); // Rating(μ=1500.0, φ=255.40, σ=0.0059)0059 }
 ```
 
 ### To get the odds one team will beat another
@@ -60,7 +60,7 @@ let mut rating_2 = Rating::new(&tuning);
 
 /// Get odds (percent chance team_1 beats team_2)
 let odds = game::odds(&mut rating_1, &mut rating_2);
-println!("{}", odds); // 0.5, perfect odds since both teams have the same rating
+println!("{odds}"); // 0.5, perfect odds since both teams have the same rating
 ```
 
 ### To determine the quality of a matchup
@@ -77,7 +77,7 @@ let mut rating_2 = Rating::new(&tuning);
 
 /// Get odds (the advantage team 1 has over team 2)
 let quality = game::quality(&mut rating_1, &mut rating_2);
-println!("{}", quality); // 1.0, perfect matchup since both teams have the same rating
+println!("{quality}"); // 1.0, perfect matchup since both teams have the same rating
 ```
 
 ### To update both team's ratings for a single matchup
@@ -96,8 +96,8 @@ let mut rating_2 = Rating::new(&tuning);
 game::compete(&mut rating_1, &mut rating_2, false);
 
 /// Print our updated ratings
-println!("{:?}", rating_1); // { mu: 1646.47, phi: 307.84, sigma: 0.0059 }
-println!("{:?}", rating_2); // { mu: 1383.42, phi: 306.83, sigma: 0.0059 }
+println!("{rating_1}"); // Rating(μ=1646.47, φ=307.84, σ=0.0059)
+println!("{rating_2}"); // Rating(μ=1383.42, φ=306.83, σ=0.0059)
 ```
 
 ## Rating

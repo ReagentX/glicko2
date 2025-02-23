@@ -75,3 +75,13 @@ impl Rating<'_> {
         self.scale_up();
     }
 }
+
+impl std::fmt::Display for Rating<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Rating(μ={:.2}, φ={:.2}, σ={:.4})",
+            self.mu, self.phi, self.sigma
+        )
+    }
+}
