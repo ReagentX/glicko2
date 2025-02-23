@@ -10,11 +10,11 @@ pub struct Rating<'a> {
     pub mu: f64,
     pub phi: f64,
     pub sigma: f64,
-    pub is_scaled: bool,
+    pub(crate) is_scaled: bool,
     pub(crate) tuning: &'a Tuning,
 }
 
-impl<'a> Rating<'a> {
+impl Rating<'_> {
     /// Create a new instance of a Rating based on the provided tuning parameters.
     ///
     /// # Example
@@ -60,10 +60,10 @@ impl<'a> Rating<'a> {
     /// # Example
     /// ```
     /// use glicko_2::{Rating, Tuning};
-    /// 
+    ///
     /// let tuning = Tuning::default();
     /// let mut new_rating = Rating::new(&tuning);
-    /// 
+    ///
     /// new_rating.decay();
     /// ```
     pub fn decay(&mut self) {
