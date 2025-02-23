@@ -8,7 +8,7 @@ Add the following to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-glicko_2 = "1.0.0"
+glicko_2 = "1.1.0"
 ```
 
 ## Sample Usage
