@@ -177,6 +177,13 @@ mod rating_tests {
     }
 
     #[test]
+    fn create_rating_string() {
+        let new_rating = Rating::new(&TUNING);
+        let rating_string = format!("{new_rating}");
+        assert_eq!(rating_string, "Rating(μ=1500.00, φ=350.00, σ=0.0060)");
+    }
+
+    #[test]
     fn scale_down() {
         let mut new_rating = Rating::new(&TUNING);
         new_rating.scale_down();
@@ -283,7 +290,7 @@ mod algorithm_tests {
         };
         algorithm::rate(
             &mut new_rating,
-            vec![(game::Outcome::Win, &mut other_rating)],
+            &mut [(game::Outcome::Win, &mut other_rating)],
         );
         println!("{:?}", new_rating);
         assert_eq!(new_rating.mu, 1643.2419919603035);

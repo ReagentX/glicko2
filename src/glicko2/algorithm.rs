@@ -90,7 +90,7 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
 /// use glicko_2::{Rating, Tuning, game::Outcome};
 ///
 /// let tuning = Tuning::default();
-/// 
+///
 /// let mut team_to_update = Rating::new(&tuning);
 /// let mut opponent_1 = Rating::new(&tuning);
 /// let mut opponent_2 = Rating::new(&tuning);
@@ -98,13 +98,13 @@ fn determine_sigma(rating: &Rating, difference: &f64, variance: &f64) -> f64 {
 ///
 /// glicko_2::algorithm::rate(
 ///     &mut team_to_update,
-///     vec![(Outcome::Win, &mut opponent_1),
+///     &mut [(Outcome::Win, &mut opponent_1),
 ///          (Outcome::Loss, &mut opponent_2),
 ///          (Outcome::Draw, &mut opponent_3),
 ///      ]
 /// );
 /// ```
-pub fn rate(rating: &mut Rating, outcomes: Vec<(Outcome, &mut Rating)>) {
+pub fn rate(rating: &mut Rating, outcomes: &mut [(Outcome, &mut Rating)]) {
     // Outcome is a list of outcomes for a set of games between two teams, i.e.
     //   a vector tuples like [(WIN, rating2), ...]
 
