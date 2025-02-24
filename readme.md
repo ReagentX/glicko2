@@ -43,7 +43,7 @@ algorithm::rate(
 opponent_4.decay();
 
 /// Print our updated rating
-println!("{:?}", team_to_update); // Rating(μ=1500.0, φ=255.40, σ=0.0059)0059 }
+println!("{:?}", team_to_update); // Rating(μ=1500.0, φ=255.40, σ=0.0059) }
 ```
 
 ### To get the odds one team will beat another
